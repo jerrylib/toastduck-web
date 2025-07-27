@@ -35,6 +35,7 @@ async function getRegionMap(cacheId: string) {
       },
       cache: "force-cache",
     }).then(async (response) => {
+      console.log('response=', response)
       const json = await response.json()
 
       if (!response.ok) {
@@ -42,7 +43,7 @@ async function getRegionMap(cacheId: string) {
       }
 
       return json
-    })
+    }).catch(error => console.log('error=', error))
 
     if (!regions?.length) {
       throw new Error(
