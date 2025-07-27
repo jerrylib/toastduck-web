@@ -26,7 +26,9 @@ async function getRegionMap(cacheId: string) {
   ) {
     // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
     const { regions } = await fetch(`${BACKEND_URL}/store/regions`, {
+      mode: 'cors',
       headers: {
+        'Content-Type': 'application/json',
         "x-publishable-api-key": PUBLISHABLE_API_KEY!,
       },
       next: {
@@ -37,7 +39,7 @@ async function getRegionMap(cacheId: string) {
     }).then(async (response) => {
       console.log('response=', response)
       const json = await response.json()
-
+      console.log('json=', json)
       if (!response.ok) {
         throw new Error(json.message)
       }
