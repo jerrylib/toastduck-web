@@ -6,7 +6,7 @@ import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
-  title: "Toast Duck web",
+  title: "Toast Duck Store",
   description:
     "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
 }
