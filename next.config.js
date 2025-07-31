@@ -36,6 +36,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
       },
+      new URL("https://www.toastduck.com/static/**"),
     ],
   },
 }
