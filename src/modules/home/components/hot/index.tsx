@@ -1,15 +1,16 @@
-import { listProductsWithSort } from "@lib/data/products"
+import { listProducts } from "@lib/data/products"
+import { getCollectionByHandle } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
 import Link from "next/link"
 import ProductImage from "../product-image"
 
-interface HeroProps {
+interface HotProps {
   countryCode?: string
 }
 
-const Hero = async ({ countryCode = "us" }: HeroProps) => {
+const Hot = async ({ countryCode = "us" }: HotProps) => {
   // 获取区域信息
   const region = await getRegion(countryCode)
 
@@ -21,17 +22,44 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
     )
   }
 
-  // 获取产品数据
-  const {
-    response: { products },
-  } = await listProductsWithSort({
-    page: 1,
-    queryParams: {
-      limit: 8,
-    },
-    sortBy: "created_at",
-    countryCode,
-  })
+  // 获取 ABB collection 的产品数据
+  let products: HttpTypes.StoreProduct[] = []
+
+  try {
+    // 首先尝试获取 ABB collection
+    const abbCollection = await getCollectionByHandle("abb")
+
+    if (abbCollection) {
+      // 获取该 collection 的产品
+      const {
+        response: { products: collectionProducts },
+      } = await listProducts({
+        regionId: region.id,
+        queryParams: {
+          collection_id: abbCollection.id,
+          limit: 8,
+          fields: "*variants.calculated_price",
+        },
+      })
+      products = collectionProducts || []
+    }
+  } catch (error) {
+    console.error("Failed to fetch ABB collection products:", error)
+  }
+
+  // 如果没有找到 ABB collection 的产品，则获取默认产品
+  if (products.length === 0) {
+    const {
+      response: { products: fallbackProducts },
+    } = await listProducts({
+      regionId: region.id,
+      queryParams: {
+        limit: 8,
+        fields: "*variants.calculated_price",
+      },
+    })
+    products = fallbackProducts || []
+  }
 
   // 辅助函数：格式化价格
   const formatPrice = (product: HttpTypes.StoreProduct) => {
@@ -39,12 +67,12 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
       const { cheapestPrice } = getProductPrice({ product })
 
       if (!cheapestPrice) {
-        return "价格待定"
+        return "No price available for now"
       }
 
-      return cheapestPrice.calculated_price + "起"
+      return `Price from ${cheapestPrice.calculated_price}`
     } catch (error) {
-      return "价格待定"
+      return "No price available for now"
     }
   }
 
@@ -103,13 +131,13 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg p-6 h-full flex flex-col justify-center items-center text-center">
               <div className="mb-4">
-                <h2 className="text-xl font-bold text-gray-900 mb-2">Xiaomi 15 系列</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-2">ABB Series</h2>
                 <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div>
-                <p className="text-sm text-gray-600">性能升级 | 影像升级体验</p>
+                <p className="text-sm text-gray-600">Good quality and reasonable price</p>
               </div>
               <div className="mt-10">
                 <ProductImage
-                  src="https://www.toastduck.com/static/default.png"
+                  src="https://www.toastduck.com/static/abb.png"
                   alt="Xiaomi 15 series"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
@@ -179,4 +207,4 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
   )
 }
 
-export default Hero
+export default Hot

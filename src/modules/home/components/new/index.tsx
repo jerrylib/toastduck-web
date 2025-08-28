@@ -5,11 +5,11 @@ import { HttpTypes } from "@medusajs/types"
 import Link from "next/link"
 import ProductImage from "../product-image"
 
-interface HeroProps {
+interface NewProps {
   countryCode?: string
 }
 
-const Hero = async ({ countryCode = "us" }: HeroProps) => {
+const New = async ({ countryCode = "us" }: NewProps) => {
   // 获取区域信息
   const region = await getRegion(countryCode)
 
@@ -29,7 +29,7 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
     queryParams: {
       limit: 8,
     },
-    sortBy: "created_at",
+    sortBy: "updated_at",
     countryCode,
   })
 
@@ -39,12 +39,12 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
       const { cheapestPrice } = getProductPrice({ product })
 
       if (!cheapestPrice) {
-        return "价格待定"
+        return "No price available for now"
       }
 
-      return cheapestPrice.calculated_price + "起"
+      return `Price from ${cheapestPrice.calculated_price}`
     } catch (error) {
-      return "价格待定"
+      return "No price available for now"
     }
   }
 
@@ -88,7 +88,7 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-900">Hot Sales</h1>
+            <h1 className="text-2xl font-bold text-gray-900">New Sales</h1>
           </div>
           <Link href={`/${countryCode}/store`} className="flex items-center text-gray-500 hover:text-gray-700 cursor-pointer">
             <span className="text-sm">View all</span>
@@ -103,13 +103,13 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg p-6 h-full flex flex-col justify-center items-center text-center">
               <div className="mb-4">
-                <h2 className="text-xl font-bold text-gray-900 mb-2">Xiaomi 15 系列</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Circuit Breaker</h2>
                 <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div>
-                <p className="text-sm text-gray-600">性能升级 | 影像升级体验</p>
+                <p className="text-sm text-gray-600">special price</p>
               </div>
               <div className="mt-10">
                 <ProductImage
-                  src="https://www.toastduck.com/static/default.png"
+                  src="https://www.toastduck.com/static/abb.png"
                   alt="Xiaomi 15 series"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
@@ -179,4 +179,4 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
   )
 }
 
-export default Hero
+export default New
