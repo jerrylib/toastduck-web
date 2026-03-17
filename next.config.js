@@ -18,6 +18,11 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // 生产环境移除 console
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  // 图片优化
   images: {
     remotePatterns: [
       {
@@ -36,8 +41,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
       },
-      new URL("https://www.toastduck.com/static/**"),
-      new URL("http://47.99.101.174:9000/static/**"),
+      {
+        protocol: "https",
+        hostname: "www.toastduck.online",
+        pathname: "/static/**",
+      },
     ],
   },
 }

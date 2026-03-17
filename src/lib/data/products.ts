@@ -53,6 +53,9 @@ export const listProducts = async ({
     ...(await getCacheOptions("products")),
   }
 
+  // 固定的 tag，用于手动清除缓存
+  const fixedTags = ["products-list"]
+
   return sdk.client
     .fetch<{ products: HttpTypes.StoreProduct[]; count: number }>(
       `/store/products`,
@@ -67,8 +70,11 @@ export const listProducts = async ({
           ...queryParams,
         },
         headers,
-        next,
-        cache: "force-cache",
+        next: {
+          ...next,
+          revalidate: 60, // 1分钟缓存
+          tags: [...(next.tags || []), ...fixedTags],
+        },
       }
     )
     .then(({ products, count }) => {

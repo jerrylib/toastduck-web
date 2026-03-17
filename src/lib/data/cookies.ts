@@ -13,7 +13,11 @@ export const getAuthHeaders = async (): Promise<
     }
 
     return { authorization: `Bearer ${token}` }
-  } catch {
+  } catch (error: any) {
+    // 静态生成时 cookies 不可用，返回空对象
+    if (error?.digest?.includes("DYNAMIC_SERVER_USAGE")) {
+      return {}
+    }
     return {}
   }
 }
@@ -28,7 +32,11 @@ export const getCacheTag = async (tag: string): Promise<string> => {
     }
 
     return `${tag}-${cacheId}`
-  } catch (error) {
+  } catch (error: any) {
+    // 静态生成时 cookies 不可用，返回空字符串
+    if (error?.digest?.includes("DYNAMIC_SERVER_USAGE")) {
+      return ""
+    }
     return ""
   }
 }

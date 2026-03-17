@@ -5,7 +5,6 @@ let MEDUSA_BACKEND_URL = "http://localhost:9000"
 
 if (process.env.MEDUSA_BACKEND_URL) {
   MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
-  console.log('MEDUSA_BACKEND_URL=', MEDUSA_BACKEND_URL)
 }
 
 export const sdk = new Medusa({

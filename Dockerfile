@@ -1,20 +1,23 @@
-# Development Dockerfile for Medusa
+# -------------------------------
+# Production stage
+# -------------------------------
 FROM node:20-alpine
 
-# Set working directory
-WORKDIR /server
+WORKDIR /app
 
-# Copy package files and yarn config
-COPY package.json yarn.lock .yarnrc.yml ./
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install all dependencies using yarn
-RUN yarn install
+EXPOSE 3000
 
-# Copy source code
-COPY . .
+# 复制构建产物（在 docker build 时通过 --build-arg 或多阶段构建传入）
+COPY ./.next ./.next
+COPY ./public ./public
+COPY ./package.json ./
+COPY ./node_modules ./node_modules
+COPY ./next.config.js ./next.config.js
+COPY ./check-env-variables.js ./check-env-variables.js
 
-# Expose the port Medusa runs on
-EXPOSE 8000
-
-# Start with migrations and then the development server
-CMD ["yarn", "start"]
+# 启动 Next.js
+CMD ["npm", "run", "start"]

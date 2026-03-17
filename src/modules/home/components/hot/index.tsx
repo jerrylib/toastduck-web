@@ -81,7 +81,7 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
     if (product.images && product.images.length > 0) {
       return product.images[0].url
     }
-    return "https://www.toastduck.com/static/default.png"
+    return "https://www.toastduck.online/static/default.png"
   }
 
   // 辅助函数：获取产品描述
@@ -137,7 +137,7 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
               </div>
               <div className="mt-10">
                 <ProductImage
-                  src="https://www.toastduck.com/static/abb.png"
+                  src="https://www.toastduck.online/static/abb.png"
                   alt="Xiaomi 15 series"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
