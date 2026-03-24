@@ -7,6 +7,9 @@ if (process.env.MEDUSA_BACKEND_URL) {
   MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 }
 
+// Google Analytics 4 Measurement ID
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+
 export const sdk = new Medusa({
   baseUrl: MEDUSA_BACKEND_URL,
   debug: process.env.NODE_ENV === "development",

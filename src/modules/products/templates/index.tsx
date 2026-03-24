@@ -6,6 +6,7 @@ import ProductOnboardingCta from "@modules/products/components/product-onboardin
 import ProductTabs from "@modules/products/components/product-tabs"
 import RelatedProducts from "@modules/products/components/related-products"
 import ProductInfo from "@modules/products/templates/product-info"
+import ProductAnalytics from "@modules/products/components/product-analytics"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { notFound } from "next/navigation"
 import ProductActionsWrapper from "./product-actions-wrapper"
@@ -28,6 +29,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
 
   return (
     <>
+      <ProductAnalytics product={product} region={region} />
       <div
         className="content-container flex flex-col small:flex-row small:items-start py-6 relative"
         data-testid="product-container"

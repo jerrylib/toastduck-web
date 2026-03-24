@@ -1,4 +1,5 @@
 import { getBaseURL } from "@lib/util/env"
+import { GA_MEASUREMENT_ID } from "@lib/config"
 import { Metadata } from "next"
 import "styles/globals.css"
 
@@ -74,6 +75,25 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" data-mode="light">
       <head>
+        {/* Google Analytics 4 */}
+        {GA_MEASUREMENT_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_MEASUREMENT_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

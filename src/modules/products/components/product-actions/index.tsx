@@ -1,6 +1,7 @@
 "use client"
 
 import { addToCart } from "@lib/data/cart"
+import { trackAddToCart } from "@lib/analytics"
 import { useIntersection } from "@lib/hooks/use-in-view"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -109,6 +110,9 @@ export default function ProductActions({
       quantity: 1,
       countryCode,
     })
+
+    // Track add to cart event
+    trackAddToCart(product, selectedVariant, 1, region)
 
     setIsAdding(false)
   }
