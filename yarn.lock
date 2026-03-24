@@ -549,6 +549,13 @@
   resolved "https://registry.npmmirror.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-15.4.4.tgz"
   integrity sha512-SE5pYNbn/xZKMy1RE3pAs+4xD32OI4rY6mzJa4XUkp/ItZY+OMjIgilskmErt8ls/fVJ+Ihopi2QIeW6O3TrMw==
 
+"@next/third-parties@^15.3.1":
+  version "15.5.14"
+  resolved "https://registry.npmjs.org/@next/third-parties/-/third-parties-15.5.14.tgz"
+  integrity sha512-fNCcA9zYZ/i4zxW0CdtINLvc+AhVJLXJhwobtEe+kOkaeNA+Hpw5SYLmRp/s9cqFm32sjebeP+ma8L8IwC22Ow==
+  dependencies:
+    third-party-capital "1.0.20"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmmirror.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -4786,7 +4793,7 @@ neo-async@^2.6.2:
   resolved "https://registry.npmmirror.com/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-next@^15.3.1:
+"next@^13.0.0 || ^14.0.0 || ^15.0.0", next@^15.3.1:
   version "15.4.4"
   resolved "https://registry.npmmirror.com/next/-/next-15.4.4.tgz"
   integrity sha512-kNcubvJjOL9yUOfwtZF3HfDhuhp+kVD+FM2A6Tyua1eI/xfmY4r/8ZS913MMz+oWKDlbps/dQOWdDricuIkXLw==
@@ -6041,6 +6048,11 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
+third-party-capital@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.npmjs.org/third-party-capital/-/third-party-capital-1.0.20.tgz"
+  integrity sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==
+
 tinyglobby@^0.2.13:
   version "0.2.14"
   resolved "https://registry.npmmirror.com/tinyglobby/-/tinyglobby-0.2.14.tgz"
@@ -6243,7 +6255,7 @@ webpack-sources@^3.3.3:
   resolved "https://registry.npmmirror.com/webpack-sources/-/webpack-sources-3.3.3.tgz"
   integrity sha512-yd1RBzSGanHkitROoPFd6qsrxt+oFhg/129YzheDGqeustzX0vTZJZsSsQjVQC4yzBQ56K55XU8gaNCtIzOnTg==
 
-webpack@^5, webpack@^5.1.0, webpack@>=2:
+webpack@^5.1.0, webpack@>=2:
   version "5.100.2"
   resolved "https://registry.npmmirror.com/webpack/-/webpack-5.100.2.tgz"
   integrity sha512-QaNKAvGCDRh3wW1dsDjeMdDXwZm2vqq3zn6Pvq4rHOEOGSaUMgOOjG2Y9ZbIGzpfkJk9ZYTHpDqgDfeBDcnLaw==
