@@ -58,9 +58,39 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
+  const collectionTitle = collection.title || ""
+  const brandDescriptions: Record<string, string> = {
+    schneider: "Schneider Electric authorized distributor: iCNV, iDPNa series miniature circuit breakers, ABB SH200 series, DZ47 series. CE/UL certified, fast EU shipping.",
+    abb: "ABB authentic power distribution components: SH200 series miniature circuit breakers, electrical protection equipment. CE/UL certified, EU warehouse shipping.",
+    chsrme: "Chsrme brand power distribution components, professional electrical protection equipment. CE/UL certified, EU shipping.",
+  }
+
+  const handleLower = collectionTitle.toLowerCase()
+  let description = `${collectionTitle} series products. CE/UL certified, EU shipping, bulk pricing available.`
+
+  for (const [brand, desc] of Object.entries(brandDescriptions)) {
+    if (handleLower.includes(brand)) {
+      description = desc
+      break
+    }
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "https://www.toastduck.com"
+  const collectionUrl = `${baseUrl}/${params.countryCode}/collections/${params.handle}`
+
   const metadata = {
-    title: `${collection.title} | Toast Duck Store`,
-    description: `${collection.title} collection`,
+    title: `${collectionTitle} - Circuit Breakers & Power Distribution | Toast Duck Store`,
+    description: description,
+    keywords: [collectionTitle, "circuit breaker", "MCB", "miniature circuit breaker", "power distribution", "CE certified", "EU shipping"],
+    openGraph: {
+      title: `${collectionTitle} - Circuit Breakers & Power Distribution | Toast Duck Store`,
+      description: description,
+      url: collectionUrl,
+      type: "website",
+    },
+    alternates: {
+      canonical: collectionUrl,
+    },
   } as Metadata
 
   return metadata

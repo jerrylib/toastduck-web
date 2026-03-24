@@ -7,9 +7,15 @@ import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
-  title: "Toast Duck Store",
+  title: "Toast Duck Store - Professional Power Distribution Components | Schneider / ABB / Chsrme",
   description:
-    "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
+    "Professional supplier of Schneider, ABB miniature circuit breakers MCB and power distribution components. CE/UL certified, EU shipping, bulk pricing. Contact us today.",
+  keywords: ["circuit breaker", "MCB", "Schneider", "ABB", "power distribution", "electrical components", "EU certified", "wholesale electrical"],
+  openGraph: {
+    title: "Toast Duck Store - Professional Power Distribution Components | Schneider / ABB / Chsrme",
+    description: "Professional supplier of Schneider, ABB miniature circuit breakers MCB and power distribution components. CE/UL certified, EU shipping, bulk pricing.",
+    type: "website",
+  },
 }
 
 export default async function Home(props: {

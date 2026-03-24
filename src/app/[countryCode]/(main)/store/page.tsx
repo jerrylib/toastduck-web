@@ -4,8 +4,9 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import StoreTemplate from "@modules/store/templates"
 
 export const metadata: Metadata = {
-  title: "Store",
-  description: "Explore all of our products.",
+  title: "All Products - Power Distribution Components | Toast Duck Store",
+  description: "Professional supplier of Schneider, ABB circuit breakers and power distribution components. CE/UL certified, EU shipping, bulk pricing. Browse our full range of miniature circuit breakers MCB, RCCB, distribution boxes and more.",
+  keywords: ["circuit breaker", "MCB", "power distribution", "Schneider", "ABB", "electrical components", "CE certified", "wholesale", "electrical equipment"],
 }
 
 type Params = {

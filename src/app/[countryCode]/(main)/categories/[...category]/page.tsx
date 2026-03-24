@@ -46,16 +46,28 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   try {
     const productCategory = await getCategoryByHandle(params.category)
+    const categoryName = productCategory.name || ""
 
-    const title = productCategory.name + " | Toast Duck Store"
+    const title = categoryName + " - Professional Power Distribution Supplier"
 
-    const description = productCategory.description ?? `${title} category.`
+    const description = productCategory.description ||
+      `${categoryName} series products. CE/UL certified, EU shipping, bulk pricing. Professional supplier of Schneider, ABB circuit breakers and power distribution components.`
+
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.toastduck.com"
+    const categoryUrl = `${baseUrl}/${params.countryCode}/categories/${params.category.join("/")}`
 
     return {
       title: `${title} | Toast Duck Store`,
       description,
+      keywords: [categoryName, "circuit breaker", "MCB", "power distribution", "CE certified", "EU shipping", "electrical components"],
+      openGraph: {
+        title: `${title} | Toast Duck Store`,
+        description,
+        url: categoryUrl,
+        type: "website",
+      },
       alternates: {
-        canonical: `${params.category.join("/")}`,
+        canonical: categoryUrl,
       },
     }
   } catch (error) {

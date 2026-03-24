@@ -1,8 +1,9 @@
-const excludedPaths = ["/checkout", "/account/*"]
+const excludedPaths = ["/checkout", "/account/*", "/order/*", "/cart", "/api/*"]
 
 module.exports = {
-  siteUrl: process.env.NEXT_PUBLIC_VERCEL_URL,
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.toastduck.com",
   generateRobotsTxt: true,
+  generateIndexSitemap: true,
   exclude: excludedPaths + ["/[sitemap]"],
   robotsTxtOptions: {
     policies: [
@@ -14,6 +15,9 @@ module.exports = {
         userAgent: "*",
         disallow: excludedPaths,
       },
+    ],
+    additionalSitemaps: [
+      "https://www.toastduck.com/dk/sitemap.xml",
     ],
   },
 }

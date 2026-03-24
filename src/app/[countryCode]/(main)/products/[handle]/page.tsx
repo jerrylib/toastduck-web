@@ -67,13 +67,26 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "https://www.toastduck.com"
+  const productUrl = `${baseUrl}/${params.countryCode}/products/${handle}`
+  const firstPrice = product.variants?.[0]?.prices?.[0]
+  const priceInfo = firstPrice
+    ? `Starting from ${firstPrice.currency === "EUR" ? "€" : "$"}${(firstPrice.amount / 100).toFixed(2)}`
+    : ""
+
   return {
-    title: `${product.title} | Toast Duck Store`,
-    description: `${product.title}`,
+    title: `${product.title} - ${product.title.toLowerCase().includes("dz47") ? "Miniature Circuit Breaker MCB" : "Power Distribution Component"} | Toast Duck`,
+    description: `${product.title}. CE certified, suitable for industrial power distribution and building electrical. EU warehouse shipping, bulk pricing available. ${priceInfo} Contact us today.`,
+    keywords: [product.title, "circuit breaker", "MCB", "miniature circuit breaker", "Schneider", "ABB", "power distribution", "CE certified", "electrical components"],
     openGraph: {
       title: `${product.title} | Toast Duck Store`,
-      description: `${product.title}`,
-      images: product.thumbnail ? [product.thumbnail] : [],
+      description: `${product.title}. CE certified, suitable for industrial power distribution and building electrical. EU warehouse shipping, bulk pricing.`,
+      url: productUrl,
+      images: product.thumbnail ? [{ url: product.thumbnail }] : [],
+      type: "website",
+    },
+    alternates: {
+      canonical: productUrl,
     },
   }
 }
