@@ -54,5 +54,15 @@ export function sortProducts(
     })
   }
 
+  if (sortBy === "sales_count") {
+    sortedProducts.sort((a, b) => {
+      const aSales = (a.metadata as Record<string, unknown>)?.sales_count as number | undefined
+      const bSales = (b.metadata as Record<string, unknown>)?.sales_count as number | undefined
+      const aCount = typeof aSales === "number" ? aSales : 0
+      const bCount = typeof bSales === "number" ? bSales : 0
+      return bCount - aCount // descending order (best sellers first)
+    })
+  }
+
   return sortedProducts
 }

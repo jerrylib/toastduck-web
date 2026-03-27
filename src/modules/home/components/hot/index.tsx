@@ -1,5 +1,4 @@
-import { listProducts } from "@lib/data/products"
-import { getCollectionByHandle } from "@lib/data/collections"
+import { listProductsWithSort } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import { getProductPrice } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
@@ -22,44 +21,17 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
     )
   }
 
-  // 获取 ABB collection 的产品数据
-  let products: HttpTypes.StoreProduct[] = []
-
-  try {
-    // 首先尝试获取 ABB collection
-    const abbCollection = await getCollectionByHandle("abb")
-
-    if (abbCollection) {
-      // 获取该 collection 的产品
-      const {
-        response: { products: collectionProducts },
-      } = await listProducts({
-        regionId: region.id,
-        queryParams: {
-          collection_id: abbCollection.id,
-          limit: 8,
-          fields: "*variants.calculated_price",
-        },
-      })
-      products = collectionProducts || []
-    }
-  } catch (error) {
-    console.error("Failed to fetch ABB collection products:", error)
-  }
-
-  // 如果没有找到 ABB collection 的产品，则获取默认产品
-  if (products.length === 0) {
-    const {
-      response: { products: fallbackProducts },
-    } = await listProducts({
-      regionId: region.id,
-      queryParams: {
-        limit: 8,
-        fields: "*variants.calculated_price",
-      },
-    })
-    products = fallbackProducts || []
-  }
+  // 获取产品数据（按销售数量排序）
+  const {
+    response: { products },
+  } = await listProductsWithSort({
+    page: 1,
+    queryParams: {
+      limit: 8,
+    },
+    sortBy: "sales_count",
+    countryCode,
+  })
 
   // 辅助函数：格式化价格
   const formatPrice = (product: HttpTypes.StoreProduct) => {
@@ -116,9 +88,10 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-900">Hot Sales</h1>
+            {/* <h1 className="text-2xl
+             font-bold text-gray-900">Hot Sales</h1> */}
           </div>
-          <Link href={`/${countryCode}/store`} className="flex items-center text-gray-500 hover:text-gray-700 cursor-pointer">
+          <Link href={`/${countryCode}/store?sortBy=sales_count`} className="flex items-center text-gray-500 hover:text-gray-700 cursor-pointer">
             <span className="text-sm">View all</span>
             <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -126,21 +99,23 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
           </Link>
         </div>
 
-        {/* Left sidebar - Xiaomi 15 series */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg p-6 h-full flex flex-col justify-center items-center text-center">
               <div className="mb-4">
-                <h2 className="text-xl font-bold text-gray-900 mb-2">ABB Series</h2>
-                <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div>
-                <p className="text-sm text-gray-600">Good quality and reasonable price</p>
-              </div>
-              <div className="mt-10">
+                {/* <h2 className="text-xl font-bold text-gray-900 mb-2">Hot Sales</h2> */}
+                {/* <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div> */}
+
                 <ProductImage
-                  src="https://www.toastduck.online/static/abb.png"
-                  alt="Xiaomi 15 series"
+                  src="https://www.toastduck.online/static/hot_sales.jpg"
+                  alt="hot sales"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
+              </div>
+              <div className="mt-10">
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Good quality and reasonable price</h2>
+                {/* <p className="text-sm text-gray-600">Good quality and reasonable price</p> */}
+                <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div>
               </div>
             </div>
           </div>

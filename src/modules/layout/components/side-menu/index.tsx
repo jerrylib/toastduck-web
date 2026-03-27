@@ -90,7 +90,7 @@ const SideMenu = ({ regions }: { regions: HttpTypes.StoreRegion[] | null }) => {
                         />
                       </div>
                       <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Fujian Toast Duck International Business Co., Ltd. All rights
+                        © {new Date().getFullYear()} ToastDuck International Business Co., Limited. All rights
                         reserved.
                       </Text>
                     </div>

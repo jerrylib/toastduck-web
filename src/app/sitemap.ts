@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next"
 import { sdk } from "@lib/config"
 
-const BASE_URL = "https://toastduck.com"
+const BASE_URL = "https://www.toastduck.com"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const defaultPages = [

@@ -88,7 +88,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-900">New Sales</h1>
+            {/* <h1 className="text-2xl font-bold text-gray-900">New Sales</h1> */}
           </div>
           <Link href={`/${countryCode}/store`} className="flex items-center text-gray-500 hover:text-gray-700 cursor-pointer">
             <span className="text-sm">View all</span>
@@ -98,21 +98,20 @@ const New = async ({ countryCode = "us" }: NewProps) => {
           </Link>
         </div>
 
-        {/* Left sidebar - Xiaomi 15 series */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg p-6 h-full flex flex-col justify-center items-center text-center">
               <div className="mb-4">
-                <h2 className="text-xl font-bold text-gray-900 mb-2">Circuit Breaker</h2>
-                <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div>
-                <p className="text-sm text-gray-600">special price</p>
-              </div>
-              <div className="mt-10">
+
                 <ProductImage
-                  src="https://www.toastduck.online/static/abb.png"
-                  alt="Xiaomi 15 series"
+                  src="https://www.toastduck.online/static/new_arrivals.jpg"
+                  alt="new arrival"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
+              </div>
+              <div className="mt-10">
+                <h2 className="text-xl font-bold text-gray-900 mb-2">Special price</h2>
+                <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div>
               </div>
             </div>
           </div>

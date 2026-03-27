@@ -98,7 +98,6 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
           </Link>
         </div>
 
-        {/* Left sidebar - Xiaomi 15 series */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg p-6 h-full flex flex-col justify-center items-center text-center">
@@ -110,7 +109,7 @@ const Hero = async ({ countryCode = "us" }: HeroProps) => {
               <div className="mt-10">
                 <ProductImage
                   src="https://www.toastduck.online/static/default.png"
-                  alt="Xiaomi 15 series"
+                  alt="new arrival"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
               </div>

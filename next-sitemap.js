@@ -16,8 +16,6 @@ module.exports = {
         disallow: excludedPaths,
       },
     ],
-    additionalSitemaps: [
-      "https://www.toastduck.com/dk/sitemap.xml",
-    ],
+    additionalSitemaps: ["https://www.toastduck.com/sitemap.xml"],
   },
 }
