@@ -4,18 +4,13 @@ import { sdk } from "@lib/config"
 const BASE_URL = "https://www.toastduck.com"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // 使用 /us 作为根 URL（与实际访问路径一致）
   const defaultPages = [
     {
-      url: BASE_URL,
+      url: `${BASE_URL}/us`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
-    },
-    {
-      url: `${BASE_URL}/us/store`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
     },
   ]
 

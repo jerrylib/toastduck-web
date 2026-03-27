@@ -25,6 +25,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       title: "Toast Duck Store - Professional Power Distribution Components | Schneider, ABB",
       description: "Professional supplier of Schneider, ABB miniature circuit breakers MCB and power distribution components. CE/UL certified, EU shipping, bulk pricing.",
       type: "website",
+      url: canonicalUrl,
       images: [
         {
           url: "https://www.toastduck.online/static/og-image.png",
