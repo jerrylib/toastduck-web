@@ -2,11 +2,31 @@ import { Metadata } from "next"
 
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import StoreTemplate from "@modules/store/templates"
+import { getBaseURL } from "@lib/util/env"
 
-export const metadata: Metadata = {
-  title: "All Products - Power Distribution Components | Toast Duck Store",
-  description: "Professional supplier of Schneider, ABB circuit breakers and power distribution components. CE/UL certified, EU shipping, bulk pricing. Browse our full range of miniature circuit breakers MCB, RCCB, distribution boxes and more.",
-  keywords: ["circuit breaker", "MCB", "power distribution", "Schneider", "ABB", "electrical components", "CE certified", "wholesale", "electrical equipment"],
+type Props = {
+  searchParams: Promise<{
+    sortBy?: SortOptions
+    page?: string
+  }>
+  params: Promise<{
+    countryCode: string
+  }>
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params
+  const baseUrl = getBaseURL()
+  const canonicalUrl = `${baseUrl}/${params.countryCode}/store`
+
+  return {
+    title: "All Products - Power Distribution Components | Toast Duck Store",
+    description: "Professional supplier of Schneider, ABB circuit breakers and power distribution components. CE/UL certified, EU shipping, bulk pricing. Browse our full range of miniature circuit breakers MCB, RCCB, distribution boxes and more.",
+    keywords: ["circuit breaker", "MCB", "power distribution", "Schneider", "ABB", "electrical components", "CE certified", "wholesale", "electrical equipment"],
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  }
 }
 
 type Params = {

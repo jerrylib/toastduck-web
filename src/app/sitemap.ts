@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${BASE_URL}/store`,
+      url: `${BASE_URL}/us/store`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
@@ -37,6 +37,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { collections } = await sdk.client.fetch<{ collections: any[] }>("/store/collections", {
       method: "GET",
       cache: "force-cache",
+    })
+
+    // Fetch product categories
+    const { product_categories } = await sdk.client.fetch<{ product_categories: any[] }>("/store/product-categories", {
+      method: "GET",
+      cache: "force-cache",
+      query: { limit: 100 },
     })
 
     const regionUrls: MetadataRoute.Sitemap = []
@@ -71,6 +78,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(collection.updated_at),
           changeFrequency: "weekly",
           priority: 0.7,
+        })
+      }
+
+      // Product Categories
+      for (const category of product_categories ?? []) {
+        regionUrls.push({
+          url: `${regionBase}/categories/${category.handle}`,
+          lastModified: new Date(category.updated_at || new Date()),
+          changeFrequency: "weekly",
+          priority: 0.6,
         })
       }
     }
