@@ -20,7 +20,7 @@ const nextConfig = {
   },
   // 生产环境移除 console
   compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
+    removeConsole: false, // 设置为 false 以保留 console 语句
   },
   // 图片优化
   images: {
