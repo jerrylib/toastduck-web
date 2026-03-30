@@ -104,7 +104,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
               <div className="mb-4">
 
                 <ProductImage
-                  src="https://www.toastduck.online/static/new_arrivals.jpg"
+                  src="/new_arrivals.jpg"
                   alt="new arrival"
                   className="w-48 h-60 object-cover rounded-lg"
                 />

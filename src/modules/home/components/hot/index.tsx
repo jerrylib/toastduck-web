@@ -107,7 +107,7 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
                 {/* <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div> */}
 
                 <ProductImage
-                  src="https://www.toastduck.online/static/hot_sales.jpg"
+                  src="/hot_sales.jpg"
                   alt="hot sales"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
