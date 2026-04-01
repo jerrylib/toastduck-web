@@ -1,6 +1,7 @@
 "use client"
 
-import { isManual, isStripe, isTtLater } from "@lib/constants"
+import { isManual, isPaypal, isStripe, isTtLater } from "@lib/constants"
+import { PayPalPayment } from "../../../../collections/form/checkout/paypal"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
@@ -35,6 +36,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
           data-testid={dataTestId}
         />
       )
+    case isPaypal(paymentSession?.provider_id):
+      return <PayPalPayment cart={cart} />
     case isManual(paymentSession?.provider_id):
       return (
         <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />

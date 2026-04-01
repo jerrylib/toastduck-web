@@ -1,7 +1,7 @@
 "use client"
 
 import { RadioGroup } from "@headlessui/react"
-import { isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
+import { isPaypal as isPaypalFunc, isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
 import { initiatePaymentSession } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import { Button, Container, Heading, Text, clx } from "@medusajs/ui"
@@ -43,10 +43,30 @@ const Payment = ({
   const setPaymentMethod = async (method: string) => {
     setError(null)
     setSelectedPaymentMethod(method)
-    if (isStripeFunc(method)) {
-      await initiatePaymentSession(cart, {
-        provider_id: method,
-      })
+
+    // Skip if already has an active session for this provider
+    if (activeSession?.provider_id === method) {
+      return
+    }
+
+    if (isStripeFunc(method) || isPaypalFunc(method)) {
+      try {
+        await initiatePaymentSession(cart, {
+          provider_id: method,
+        })
+        // Refresh to get updated cart with new payment session
+        router.refresh()
+      } catch (err: any) {
+        // Restore previous selection on error
+        setSelectedPaymentMethod(activeSession?.provider_id ?? "")
+        // Refresh to sync cart state
+        router.refresh()
+        if (err.message?.includes("Could not delete all payment sessions")) {
+          setError("Unable to switch payment method. Please refresh the page and try again.")
+        } else {
+          setError(err.message)
+        }
+      }
     }
   }
 
@@ -82,9 +102,21 @@ const Payment = ({
         activeSession?.provider_id === selectedPaymentMethod
 
       if (!checkActiveSession) {
-        await initiatePaymentSession(cart, {
-          provider_id: selectedPaymentMethod,
-        })
+        try {
+          await initiatePaymentSession(cart, {
+            provider_id: selectedPaymentMethod,
+          })
+          // Refresh to get updated cart with new payment session
+          router.refresh()
+        } catch (err: any) {
+          if (err.message?.includes("Could not delete all payment sessions")) {
+            setError("Unable to switch payment method. Please refresh the page and try again.")
+            setIsLoading(false)
+            router.refresh()
+            return
+          }
+          throw err
+        }
       }
 
       if (!shouldInputCard) {
