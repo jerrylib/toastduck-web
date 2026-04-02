@@ -4,15 +4,8 @@ import { sdk } from "@lib/config"
 const BASE_URL = "https://www.toastduck.com"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // 使用 /us 作为根 URL（与实际访问路径一致）
-  const defaultPages = [
-    {
-      url: `${BASE_URL}/us`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 1,
-    },
-  ]
+  // Default pages (will be replaced by region-based pages if available)
+  const defaultPages: MetadataRoute.Sitemap = []
 
   try {
     // Fetch regions to get available country codes
@@ -47,6 +40,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const region of regions ?? []) {
       const countryCode = region.countries?.[0]?.iso_2?.toLowerCase() ?? "us"
       const regionBase = `${BASE_URL}/${countryCode}`
+
+      // Home page per region
+      regionUrls.push({
+        url: regionBase,
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: countryCode === "us" ? 1 : 0.9,
+      })
 
       // Store page per region
       regionUrls.push({

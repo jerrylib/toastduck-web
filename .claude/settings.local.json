@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebSearch",
+      "Bash(git fetch:*)",
+      "Bash(git push:*)",
+      "Bash(where gh:*)",
+      "Bash(echo:*)"
     ]
   }
 }
