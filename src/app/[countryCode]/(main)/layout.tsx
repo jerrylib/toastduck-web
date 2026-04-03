@@ -4,13 +4,46 @@ import { listCartOptions, retrieveCart } from "@lib/data/cart"
 import { retrieveCustomer } from "@lib/data/customer"
 import { getBaseURL } from "@lib/util/env"
 import { StoreCartShippingOption } from "@medusajs/types"
+import { sdk } from "@lib/config"
 import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
 import Footer from "@modules/layout/templates/footer"
 import Nav from "@modules/layout/templates/nav"
 import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getBaseURL()),
+type Props = {
+  params: Promise<{ countryCode: string }>
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params
+  const baseUrl = getBaseURL()
+
+  // Fetch regions to generate hreflang for all country versions
+  let languages: Record<string, string> = {}
+
+  try {
+    const { regions } = await sdk.client.fetch<{ regions: any[] }>("/store/regions", {
+      cache: "force-cache",
+    })
+
+    for (const region of regions ?? []) {
+      const cc = region.countries?.[0]?.iso_2?.toLowerCase() ?? "us"
+      languages[cc] = `${baseUrl}/${cc}`
+    }
+  } catch (error) {
+    // Fallback to current region if regions fetch fails
+    languages[params.countryCode] = `${baseUrl}/${params.countryCode}`
+  }
+
+  // Add x-default for the default region
+  languages["x-default"] = `${baseUrl}/us`
+
+  return {
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      languages,
+    },
+  }
 }
 
 export default async function PageLayout(props: { children: React.ReactNode }) {

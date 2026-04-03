@@ -179,11 +179,14 @@ export async function middleware(request: NextRequest) {
 
   const queryString = request.nextUrl.search ? request.nextUrl.search : ""
 
-  // If no country code is set, we redirect to the relevant region.
+  // If no country code is set, rewrite to the relevant region (US by default) without redirect
   if (!urlHasCountryCode && countryCode) {
-    redirectUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
-    console.log("[Middleware] Redirecting to:", redirectUrl)
-    response = NextResponse.redirect(`${redirectUrl}`, 307)
+    const rewriteUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
+    console.log("[Middleware] Rewriting to:", rewriteUrl)
+    response = NextResponse.rewrite(rewriteUrl)
+    response.cookies.set("_medusa_cache_id", cacheId, {
+      maxAge: 60 * 60 * 24,
+    })
   }
 
   console.log("[Middleware] ===== Request End =====")

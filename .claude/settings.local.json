@@ -3,7 +3,12 @@
     "allow": [
       "mcp__ide__getDiagnostics",
       "WebFetch(domain:www.npmjs.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(git fetch:*)",
+      "Bash(git push:*)",
+      "Bash(where gh:*)",
+      "Bash(echo:*)",
+      "Bash(gh pr:*)"
     ]
   }
 }
