@@ -51,6 +51,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "pub-4c2d135a54b44610914c9732595058fb.r2.dev",
       },
+      {
+        protocol: "https",
+        hostname: "images.toastduck.fun",
+      },
     ],
   },
 }
