@@ -29,22 +29,27 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
-      {
-        protocol: "https",
-        hostname: "medusa-public-images.s3.eu-west-1.amazonaws.com",
-      },
-      {
-        protocol: "https",
-        hostname: "medusa-server-testing.s3.amazonaws.com",
-      },
-      {
-        protocol: "https",
-        hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
-      },
+      // {
+      //   protocol: "https",
+      //   hostname: "medusa-public-images.s3.eu-west-1.amazonaws.com",
+      // },
+      // {
+      //   protocol: "https",
+      //   hostname: "medusa-server-testing.s3.amazonaws.com",
+      // },
+      // {
+      //   protocol: "https",
+      //   hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
+      // },
       {
         protocol: "https",
         hostname: "www.toastduck.online",
         pathname: "/static/**",
+      },
+      // 以上地址是示例地址，请根据实际情况修改为你的图片来源地址，现在只用r2的地址进行内容存储
+      {
+        protocol: "https",
+        hostname: "pub-4c2d135a54b44610914c9732595058fb.r2.dev",
       },
     ],
   },
