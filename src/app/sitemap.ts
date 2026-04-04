@@ -1,10 +1,9 @@
 import { MetadataRoute } from "next"
 import { sdk } from "@lib/config"
-
-const BASE_URL = "https://www.toastduck.com"
+import { getBaseURL } from "@lib/util/env"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Default pages (will be replaced by region-based pages if available)
+  const BASE_URL = getBaseURL()
   const defaultPages: MetadataRoute.Sitemap = []
 
   try {
@@ -34,27 +33,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       query: { limit: 100 },
     })
 
+    const allCountryCodes: string[] = []
+    regions.forEach((region) => {
+      region.countries?.forEach((c: any) => {
+        if (c.iso_2) allCountryCodes.push(c.iso_2.toLowerCase())
+      })
+    })
+
     const regionUrls: MetadataRoute.Sitemap = []
 
-    // Generate URLs for each region
-    for (const region of regions ?? []) {
-      const countryCode = region.countries?.[0]?.iso_2?.toLowerCase() ?? "us"
+    const getLanguages = (path: string) => {
+      const languages: Record<string, string> = {}
+      allCountryCodes.forEach((code) => {
+        languages[code] = `${BASE_URL}/${code}${path}`
+      })
+      return languages
+    }
+
+    // Generate URLs for each country
+    for (const countryCode of allCountryCodes) {
       const regionBase = `${BASE_URL}/${countryCode}`
 
-      // Home page per region
+      // Home page
       regionUrls.push({
         url: regionBase,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: countryCode === "us" ? 1 : 0.9,
+        languages: getLanguages(""),
       })
 
-      // Store page per region
+      // Store page
       regionUrls.push({
         url: `${regionBase}/store`,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.8,
+        languages: getLanguages("/store"),
       })
 
       // Products
@@ -64,6 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(product.updated_at),
           changeFrequency: "weekly",
           priority: 0.7,
+          languages: getLanguages(`/products/${product.handle}`),
         })
       }
 
@@ -74,6 +90,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(collection.updated_at),
           changeFrequency: "weekly",
           priority: 0.7,
+          languages: getLanguages(`/collections/${collection.handle}`),
         })
       }
 
@@ -84,13 +101,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(category.updated_at || new Date()),
           changeFrequency: "weekly",
           priority: 0.6,
+          languages: getLanguages(`/categories/${category.handle}`),
         })
       }
     }
 
     return [...defaultPages, ...regionUrls]
   } catch (error) {
-    // Return basic sitemap if API fails
     return defaultPages
   }
 }

@@ -4,6 +4,10 @@ import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
 import ProductTemplate from "@modules/products/templates"
 
+import { getBaseURL } from "@lib/util/env"
+import { getHreflangAlternates } from "@lib/util/seo"
+import ProductSchema from "@modules/products/components/product-schema"
+
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
 }
@@ -67,8 +71,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "https://www.toastduck.com"
+  const baseUrl = getBaseURL()
   const productUrl = `${baseUrl}/${params.countryCode}/products/${handle}`
+  const alternates = await getHreflangAlternates(`/products/${handle}`)
   const firstPrice = product.variants?.[0]?.prices?.[0]
   const priceInfo = firstPrice
     ? `Starting from ${firstPrice.currency === "EUR" ? "€" : "$"}${(firstPrice.amount / 100).toFixed(2)}`
@@ -87,6 +92,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: productUrl,
+      languages: alternates.languages,
     },
   }
 }
@@ -109,10 +115,13 @@ export default async function ProductPage(props: Props) {
   }
 
   return (
-    <ProductTemplate
-      product={pricedProduct}
-      region={region}
-      countryCode={params.countryCode}
-    />
+    <>
+      <ProductSchema product={pricedProduct} region={region} countryCode={params.countryCode} />
+      <ProductTemplate
+        product={pricedProduct}
+        region={region}
+        countryCode={params.countryCode}
+      />
+    </>
   )
 }
