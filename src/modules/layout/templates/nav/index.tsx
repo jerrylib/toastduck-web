@@ -7,17 +7,24 @@ import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
 
 const noticeMessages: Record<string, { message: string }> = {
-  us: { message: "Now we support PayPal and Stripe payment, start your procurement with us!" },
-  gb: { message: "Now we support PayPal and Stripe payment, start your procurement with us!" },
-  de: { message: "Jetzt unterstützen wir PayPal und Stripe-Zahlung, beginnen Sie Ihre Beschaffung mit uns!" },
-  dk: { message: "Nu supporterer vi PayPal og Stripe-betaling, start din indkøbsrejse med os!" },
-  fr: { message: "Maintenant, nous supportons les paiements PayPal et Stripe, commencez vos achats avec nous!" },
-  es: { message: "¡Ahora apoyamos PayPal y Stripe, comienza tu procurement con nosotros!" },
-  it: { message: "Ora supportiamo pagamenti PayPal e Stripe, inizia il tuo approvvigionamento con noi!" },
-  nl: { message: "Nu ondersteunen we PayPal en Stripe betalingen, begin met je procurement bij ons!" },
-  zh: { message: "现在我们支持PayPal和Stripe支付，快开始我们的采购吧!" },
-  tw: { message: "現在我們支援PayPal和Stripe支付，快開始我們的採購吧!" },
-  default: { message: "Now we support PayPal and Stripe payment, start your procurement with us!" },
+  us: { message: "We now support xTransfer, welcome to start your procurement with us!" },
+  gb: { message: "We now support xTransfer, welcome to start your procurement with us!" },
+  de: { message: "Wir unterstützen jetzt xTransfer, willkommen zu Ihrer Beschaffung bei uns!" },
+  dk: { message: "Vi understøtter nu xTransfer, velkommen til at starte din indkøbsrejse med os!" },
+  fr: { message: "Nous prenons désormais en charge xTransfer, bienvenue pour commencer vos achats avec nous!" },
+  es: { message: "¡Ahora apoyamos xTransfer, bienvenido a comenzar tu procurement con nosotros!" },
+  it: { message: "Ora supportiamo xTransfer, benvenuto per iniziare il tuo approvvigionamento con noi!" },
+  nl: { message: "We ondersteunen nu xTransfer, welkom om te beginnen met je inkopen bij ons!" },
+  pt: { message: "Agora suportamos xTransfer, bem-vindo para começar suas compras conosco!" },
+  ru: { message: "Теперь мы поддерживаем xTransfer, добро пожаловать к нам для закупок!" },
+  ja: { message: "ただいまxTransferをサポート開始しました、お気軽にお買い物を始めましょう！" },
+  ko: { message: "이제 xTransfer를 지원합니다. 쇼핑을 시작하세요!" },
+  zh: { message: "我们支持xTransfer了，欢迎来采购吧!" },
+  tw: { message: "我們支援xTransfer了，歡迎來採購吧!" },
+  ar: { message: "نحن ندعم xTransfer الآن. مرحباً بك للبدء في التسوق معنا!" },
+  hi: { message: "अब हम xTransfer का समर्थन करते हैं. खरीदारी शुरू करें!" },
+  vi: { message: "Bây giờ chúng tôi hỗ trợ xTransfer. Chào mừng bạn đến với chúng tôi!" },
+  default: { message: "We now support xTransfer, welcome to start your procurement with us!" },
 }
 
 type NavProps = {
