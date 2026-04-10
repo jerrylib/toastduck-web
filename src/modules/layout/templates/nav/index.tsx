@@ -6,11 +6,40 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import CartButton from "@modules/layout/components/cart-button"
 import SideMenu from "@modules/layout/components/side-menu"
 
-export default async function Nav() {
+const noticeMessages: Record<string, { message: string }> = {
+  us: { message: "We now support xTransfer, welcome to start your procurement with us!" },
+  gb: { message: "We now support xTransfer, welcome to start your procurement with us!" },
+  de: { message: "Wir unterstützen jetzt xTransfer, willkommen zu Ihrer Beschaffung bei uns!" },
+  dk: { message: "Vi understøtter nu xTransfer, velkommen til at starte din indkøbsrejse med os!" },
+  fr: { message: "Nous prenons désormais en charge xTransfer, bienvenue pour commencer vos achats avec nous!" },
+  es: { message: "¡Ahora apoyamos xTransfer, bienvenido a comenzar tu procurement con nosotros!" },
+  it: { message: "Ora supportiamo xTransfer, benvenuto per iniziare il tuo approvvigionamento con noi!" },
+  nl: { message: "We ondersteunen nu xTransfer, welkom om te beginnen met je inkopen bij ons!" },
+  pt: { message: "Agora suportamos xTransfer, bem-vindo para começar suas compras conosco!" },
+  ru: { message: "Теперь мы поддерживаем xTransfer, добро пожаловать к нам для закупок!" },
+  ja: { message: "ただいまxTransferをサポート開始しました、お気軽にお買い物を始めましょう！" },
+  ko: { message: "이제 xTransfer를 지원합니다. 쇼핑을 시작하세요!" },
+  zh: { message: "我们支持xTransfer了，欢迎来采购吧!" },
+  tw: { message: "我們支援xTransfer了，歡迎來採購吧!" },
+  ar: { message: "نحن ندعم xTransfer الآن. مرحباً بك للبدء في التسوق معنا!" },
+  hi: { message: "अब हम xTransfer का समर्थन करते हैं. खरीदारी शुरू करें!" },
+  vi: { message: "Bây giờ chúng tôi hỗ trợ xTransfer. Chào mừng bạn đến với chúng tôi!" },
+  default: { message: "We now support xTransfer, welcome to start your procurement with us!" },
+}
+
+type NavProps = {
+  countryCode?: string
+}
+
+export default async function Nav({ countryCode }: NavProps) {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
+  const notice = noticeMessages[countryCode?.toLowerCase() ?? ""] || noticeMessages["default"]
 
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
+      <div className="bg-yellow-300 text-center py-2 text-sm font-medium text-yellow-900">
+        {notice.message}
+      </div>
       <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
         <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
           <div className="flex-1 basis-0 h-full flex items-center">

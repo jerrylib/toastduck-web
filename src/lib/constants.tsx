@@ -33,6 +33,10 @@ export const paymentInfoMap: Record<
   "pp_ttlater_tt": {
     title: 'Make a T/T transfer later',
     icon: <Window />,
+  },
+  "pp_ttlater_xtransfer": {
+    title: 'Make a xTransfer transfer later',
+    icon: <Window />,
   }
   // Add more payment providers here
 }
@@ -49,6 +53,10 @@ export const isManual = (providerId?: string) => {
 }
 export const isTtLater = (providerId?: string) => {
   return providerId?.startsWith("pp_ttlater_tt")
+}
+
+export const isXtransfer = (providerId?: string) => {
+  return providerId === 'pp_ttlater_xtransfer'
 }
 
 // Add currencies that don't need to be divided by 100
