@@ -6,6 +6,7 @@ import Hot from "@modules/home/components/hot"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { getBaseURL } from "@lib/util/env"
+import { getHreflangAlternates } from "@lib/util/seo"
 
 type Props = {
   params: Promise<{ countryCode: string }>
@@ -15,6 +16,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   const baseUrl = getBaseURL()
   const canonicalUrl = `${baseUrl}/${params.countryCode}`
+  const alternates = await getHreflangAlternates("")
 
   return {
     title: "Toast Duck Store - Professional Power Distribution Components | Schneider, ABB",
@@ -37,6 +39,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: canonicalUrl,
+      languages: alternates.languages,
     },
   }
 }
