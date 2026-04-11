@@ -1,0 +1,4 @@
+# GET
+GET http://localhost:9000/store/payment-providers?region_id=reg_01KN23P07C3P0HWGQE2G30P6KN
+content-type: application/json
+x-publishable-api-key: pk_5a85d2d8e12f1f792c8956973021041b0a4229f9cd2e3e7f38f2d4aea86654da
