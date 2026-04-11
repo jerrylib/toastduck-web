@@ -30,6 +30,7 @@ const optionsAsKeymap = (
 
 export default function ProductActions({
   product,
+  region,
   disabled,
 }: ProductActionsProps) {
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
