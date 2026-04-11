@@ -30,7 +30,6 @@ const optionsAsKeymap = (
 
 export default function ProductActions({
   product,
-  region,
   disabled,
   region
 }: ProductActionsProps) {
