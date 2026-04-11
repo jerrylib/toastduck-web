@@ -9,9 +9,11 @@ import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
 import Footer from "@modules/layout/templates/footer"
 import Nav from "@modules/layout/templates/nav"
 import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
+import { Analytics } from "@vercel/analytics/next"
 
 type Props = {
   params: Promise<{ countryCode: string }>
+  children: React.ReactNode
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
@@ -46,7 +48,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 }
 
-export default async function PageLayout(props: { children: React.ReactNode }) {
+export default async function PageLayout(props: Props) {
+  const { countryCode } = await props.params
   const customer = await retrieveCustomer()
   const cart = await retrieveCart()
   let shippingOptions: StoreCartShippingOption[] = []
@@ -59,7 +62,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
 
   return (
     <>
-      <Nav />
+      <Nav countryCode={countryCode} />
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />
       )}
@@ -73,6 +76,8 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
       )}
       {props.children}
       <Footer />
+      {/* add vercel analytics for tracking */}
+      <Analytics />
     </>
   )
 }

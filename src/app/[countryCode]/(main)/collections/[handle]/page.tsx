@@ -7,6 +7,9 @@ import { StoreCollection, StoreRegion } from "@medusajs/types"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
+import { getBaseURL } from "@lib/util/env"
+import { getHreflangAlternates } from "@lib/util/seo"
+
 type Props = {
   params: Promise<{ handle: string; countryCode: string }>
   searchParams: Promise<{
@@ -75,8 +78,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "https://www.toastduck.com"
-  const collectionUrl = `${baseUrl}/${params.countryCode}/collections/${params.handle}`
+  const baseUrl = getBaseURL()
+  const collectionPath = `/collections/${params.handle}`
+  const collectionUrl = `${baseUrl}/${params.countryCode}${collectionPath}`
+  const alternates = await getHreflangAlternates(collectionPath)
 
   const metadata = {
     title: `${collectionTitle} - Circuit Breakers & Power Distribution | Toast Duck Store`,
@@ -90,6 +95,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: collectionUrl,
+      languages: alternates.languages,
     },
   } as Metadata
 
