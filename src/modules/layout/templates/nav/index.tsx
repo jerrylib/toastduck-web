@@ -54,7 +54,7 @@ export default async function Nav({ countryCode }: NavProps) {
               className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
               data-testid="nav-store-link"
             >
-              Toast Duck Store
+              Industrial Automation & Electrical Supply
             </LocalizedClientLink>
           </div>
 
