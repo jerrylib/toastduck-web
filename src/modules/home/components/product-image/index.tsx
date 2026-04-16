@@ -12,8 +12,8 @@ const ProductImage = ({ src, alt, className }: ProductImageProps) => {
     const [imageSrc, setImageSrc] = useState(src)
 
     const handleError = () => {
-        if (imageSrc !== "https://www.toastduck.online/static/default.png") {
-            setImageSrc("https://www.toastduck.online/static/default.png")
+        if (imageSrc !== "https://images.toastduck.fun/default-01KPA529T747DE7ZV6D72A56TX.png") {
+            setImageSrc("https://images.toastduck.fun/default-01KPA529T747DE7ZV6D72A56TX.png")
         }
     }
 

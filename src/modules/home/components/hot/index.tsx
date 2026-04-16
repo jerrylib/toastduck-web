@@ -70,7 +70,7 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
     if (product.images && product.images.length > 0) {
       return product.images[0].url
     }
-    return "https://www.toastduck.online/static/default.png"
+    return "https://images.toastduck.fun/default-01KPA529T747DE7ZV6D72A56TX.png"
   }
 
   // 辅助函数：获取产品描述
@@ -124,7 +124,7 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
                 {/* <div className="w-8 h-1 bg-orange-500 mx-auto mb-4"></div> */}
 
                 <ProductImage
-                  src="/hot_sales.jpg"
+                  src="https://images.toastduck.fun/hot_sales-01KPA4FZHH6V31NZF0A85HQ9V5.jpg"
                   alt="hot sales"
                   className="w-48 h-60 object-cover rounded-lg"
                 />

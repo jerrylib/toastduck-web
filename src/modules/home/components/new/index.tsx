@@ -70,7 +70,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
     if (product.images && product.images.length > 0) {
       return product.images[0].url
     }
-    return "https://www.toastduck.online/static/default.png"
+    return "https://images.toastduck.fun/default-01KPA529T747DE7ZV6D72A56TX.png"
   }
 
   // 辅助函数：获取产品描述
@@ -121,7 +121,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
               <div className="mb-4">
 
                 <ProductImage
-                  src="/new_arrivals.jpg"
+                  src="https://images.toastduck.fun/new_arrivals-01KPA4FZHK72PC26KRK8G3WJ3M.jpg"
                   alt="new arrival"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
