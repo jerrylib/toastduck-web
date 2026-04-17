@@ -30,9 +30,9 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       url: canonicalUrl,
       images: [
         {
-          url: "https://www.toastduck.online/static/og-image.png",
-          width: 1200,
-          height: 630,
+          url: "https://images.toastduck.fun/IMG_2039_20191017-235429_1080x-01KPA9TZR3Y88K9ZN452VE0SEE.webp",
+          width: 1080,
+          height: 690,
           alt: "Toast Duck Store - Professional Power Distribution Components",
         },
       ],

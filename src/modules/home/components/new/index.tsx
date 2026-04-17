@@ -16,7 +16,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
   if (!region) {
     return (
       <div className="min-h-screen bg-gray-50 py-8 flex items-center justify-center">
-        <p className="text-gray-500">无法加载产品数据</p>
+        <p className="text-gray-500">Loading failed</p>
       </div>
     )
   }
@@ -33,7 +33,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
     countryCode,
   })
 
-  // 辅助函数：格式化价格
+  // 辅助函数：格式化价格（PC端完整格式）
   const formatPrice = (product: HttpTypes.StoreProduct) => {
     try {
       const { cheapestPrice } = getProductPrice({ product })
@@ -48,12 +48,29 @@ const New = async ({ countryCode = "us" }: NewProps) => {
     }
   }
 
+  // 辅助函数：格式化价格（移动端简短格式）
+  const formatPriceShort = (product: HttpTypes.StoreProduct) => {
+    try {
+      const { cheapestPrice } = getProductPrice({ product })
+
+      if (!cheapestPrice) {
+        return "N/A"
+      }
+
+      const priceStr = cheapestPrice.calculated_price
+      const priceWithoutDecimals = priceStr.replace(/\.\d+$/, "")
+      return `${priceWithoutDecimals}+`
+    } catch (error) {
+      return "N/A"
+    }
+  }
+
   // 辅助函数：获取产品图片
   const getProductImage = (product: HttpTypes.StoreProduct) => {
     if (product.images && product.images.length > 0) {
       return product.images[0].url
     }
-    return "https://www.toastduck.online/static/default.png"
+    return "https://images.toastduck.fun/default-01KPA529T747DE7ZV6D72A56TX.png"
   }
 
   // 辅助函数：获取产品描述
@@ -104,7 +121,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
               <div className="mb-4">
 
                 <ProductImage
-                  src="/new_arrivals.jpg"
+                  src="https://images.toastduck.fun/new_arrivals-01KPA4FZHK72PC26KRK8G3WJ3M.jpg"
                   alt="new arrival"
                   className="w-48 h-60 object-cover rounded-lg"
                 />
@@ -124,6 +141,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
                 const productImage = getProductImage(product)
                 const subtitle = getProductSubtitle(product)
                 const price = formatPrice(product)
+                const priceShort = formatPriceShort(product)
 
                 return (
                   <Link
@@ -142,13 +160,13 @@ const New = async ({ countryCode = "us" }: NewProps) => {
                       </div>
 
                       {/* Product info */}
-                      <div className="text-center flex-1 flex flex-col justify-between">
+                      <div className="text-center flex-1 flex flex-col justify-between min-h-0">
                         <div>
-                          <h3 className="font-medium text-gray-900 mb-2 text-sm">{product.title}</h3>
-                          <p className="text-xs text-gray-600 mb-3 h-8 leading-tight overflow-hidden">{subtitle}</p>
+                          <h3 className="font-medium text-gray-900 mb-2 text-sm line-clamp-2">{product.title}</h3>
+                          <p className="text-xs text-gray-600 mb-3 line-clamp-2 leading-tight">{subtitle}</p>
                         </div>
 
-                        <div>
+                        <div className="flex-shrink-0">
                           {/* Color options */}
                           <div className="flex justify-center space-x-1 mb-3">
                             {colors.map((color, index) => (
@@ -161,8 +179,11 @@ const New = async ({ countryCode = "us" }: NewProps) => {
                           </div>
 
                           {/* Price */}
-                          <div className="flex justify-center items-center space-x-1">
-                            <span className="text-orange-500 font-semibold text-base">{price}</span>
+                          <div className="flex justify-center items-center">
+                            <span className="text-orange-500 font-semibold text-base lg:text-sm">
+                              <span className="lg:hidden">{priceShort}</span>
+                              <span className="hidden lg:inline">{price}</span>
+                            </span>
                           </div>
                         </div>
                       </div>
