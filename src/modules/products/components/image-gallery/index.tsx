@@ -14,19 +14,20 @@ const ImageGallery = ({ images }: ImageGalleryProps) => {
           return (
             <Container
               key={image.id}
-              className="relative aspect-[29/34] w-full overflow-hidden bg-ui-bg-subtle"
+              className="relative w-full overflow-hidden bg-ui-bg-subtle p-0"
               id={image.id}
             >
               {!!image.url && (
                 <Image
                   src={image.url}
                   priority={index <= 2 ? true : false}
-                  className="absolute inset-0 rounded-rounded"
                   alt={`Product image ${index + 1}`}
-                  fill
-                  sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
+                  width={1200}
+                  height={1000}
+                  className="w-full h-auto rounded-rounded"
+                  sizes="100vw"
                   style={{
-                    objectFit: "cover",
+                    objectFit: "contain",
                   }}
                 />
               )}
