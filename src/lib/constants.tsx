@@ -1,5 +1,5 @@
 import React from "react"
-import { CreditCard, Window } from "@medusajs/icons"
+import { CreditCard, Window, History } from "@medusajs/icons"
 
 import Ideal from "@modules/common/icons/ideal"
 import Bancontact from "@modules/common/icons/bancontact"
@@ -34,9 +34,17 @@ export const paymentInfoMap: Record<
     title: 'Make a T/T transfer later',
     icon: <Window />,
   },
-  "pp_ttlater_xtransfer": {
+  "pp_xtransferpayment_xtransfer": {
     title: 'Make a xTransfer transfer later',
     icon: <Window />,
+  },
+  "pp_picturepayment_alipay": {
+    title: 'Alipay - Please note your order number when transferring',
+    icon: <History />,
+  },
+  "pp_picturepayment_wechat": {
+    title: 'Wechat Pay - Please note your order number when transferring',
+    icon: <History />,
   }
   // Add more payment providers here
 }
@@ -56,7 +64,11 @@ export const isTtLater = (providerId?: string) => {
 }
 
 export const isXtransfer = (providerId?: string) => {
-  return providerId === 'pp_ttlater_xtransfer'
+  return providerId === 'pp_xtransferpayment_xtransfer'
+}
+
+export const isPicturePayment = (providerId?: string) => {
+  return providerId === 'pp_picturepayment_alipay' || providerId === 'pp_picturepayment_wechat'
 }
 
 // Add currencies that don't need to be divided by 100

@@ -3,7 +3,7 @@
 import { Container, Heading, Text } from "@medusajs/ui"
 import { useState } from "react"
 
-import { isStripe, isTtLater, isXtransfer, paymentInfoMap } from "@lib/constants"
+import { isPicturePayment, isStripe, isTtLater, isXtransfer, paymentInfoMap } from "@lib/constants"
 import Divider from "@modules/common/components/divider"
 import { convertToLocale } from "@lib/util/money"
 import { HttpTypes } from "@medusajs/types"
@@ -18,6 +18,7 @@ type PaymentDetailsProps = {
 const PaymentDetails = ({ order }: PaymentDetailsProps) => {
   const payment = order.payment_collections?.[0].payments?.[0]
   const [copiedField, setCopiedField] = useState<string | null>(null)
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null)
 
   const handleCopy = async (value: string, fieldName: string) => {
     try {
@@ -171,6 +172,17 @@ const PaymentDetails = ({ order }: PaymentDetailsProps) => {
           <CloneDashed className="cursor-pointer text-gray-500 hover:text-gray-700 ml-2" />
         </div>
       </div>
+    } else if (isPicturePayment(payment.provider_id)) {
+      const { data } = payment
+      const picUrl = String(data?.pic_url ?? "")
+      return <div className="bg-white rounded-lg flex justify-center">
+        <img
+          src={picUrl}
+          alt="Payment"
+          className="max-w-[50%] h-auto rounded cursor-pointer hover:opacity-90 transition-opacity"
+          onClick={() => setLightboxUrl(picUrl)}
+        />
+      </div>
     } else {
       return <Text data-testid="payment-amount">
         {`${convertToLocale({
@@ -206,7 +218,7 @@ const PaymentDetails = ({ order }: PaymentDetailsProps) => {
                 Payment details
               </Text>
               <div className={`flex txt-medium text-ui-fg-subtle items-center${isXtransfer(payment.provider_id) || isTtLater(payment.provider_id) ? '' : ' gap-2'}`}>
-                {isXtransfer(payment.provider_id) || isTtLater(payment.provider_id) ? null : (
+                {isXtransfer(payment.provider_id) || isTtLater(payment.provider_id) || isPicturePayment(payment.provider_id) ? null : (
                   <Container className="flex items-center h-7 w-fit p-2 bg-ui-button-neutral-hover">
                     {paymentInfoMap[payment.provider_id].icon}
                   </Container>
@@ -217,6 +229,20 @@ const PaymentDetails = ({ order }: PaymentDetailsProps) => {
           </div>
         )}
       </div>
+
+      {lightboxUrl && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 cursor-pointer"
+          onClick={() => setLightboxUrl(null)}
+        >
+          <img
+            src={lightboxUrl}
+            alt="Payment enlarged"
+            className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
 
       <Divider className="mt-8" />
     </div >
