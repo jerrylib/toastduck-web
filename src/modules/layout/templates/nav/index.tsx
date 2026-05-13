@@ -38,7 +38,7 @@ export default async function Nav({ countryCode }: NavProps) {
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
       <div className="bg-yellow-300 text-center py-2 text-sm font-medium text-yellow-900">
-        {notice.message}
+        For the latest news, please follow <a href="https://company.toastduck.com/#/news" target="_blank" rel="noopener noreferrer" className="underline">https://company.toastduck.com/#/news</a>
       </div>
       <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
         <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
