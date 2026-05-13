@@ -10,6 +10,7 @@ import Footer from "@modules/layout/templates/footer"
 import Nav from "@modules/layout/templates/nav"
 import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
 import { Analytics } from "@vercel/analytics/next"
+import WhatsAppFloat from "@modules/common/components/whatsapp-float"
 
 type Props = {
   params: Promise<{ countryCode: string }>
@@ -75,6 +76,7 @@ export default async function PageLayout(props: Props) {
         />
       )}
       {props.children}
+      <WhatsAppFloat />
       <Footer />
       {/* add vercel analytics for tracking */}
       <Analytics />
