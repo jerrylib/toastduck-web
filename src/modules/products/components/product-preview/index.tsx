@@ -30,13 +30,20 @@ export default async function ProductPreview({
 
   return (
     <LocalizedClientLink href={`/products/${product.handle}`} className="group">
-      <div data-testid="product-wrapper">
+      <div data-testid="product-wrapper" className="relative">
         <Thumbnail
           thumbnail={product.thumbnail}
           images={product.images}
           size="full"
           isFeatured={isFeatured}
         />
+        {product.tags?.some((tag) => tag.value === "second-hand") && (
+          <div className="absolute top-0 right-0 w-0 h-0 border-t-[60px] border-t-orange-500 border-l-[60px] border-l-transparent">
+            <span className="absolute top-[-46px] right-[5px] text-white text-[10px] font-bold rotate-45">
+              USED
+            </span>
+          </div>
+        )}
         <div className="flex txt-compact-medium mt-4 justify-between">
           <Text className="text-ui-fg-subtle" data-testid="product-title">
             {product.title}

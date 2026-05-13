@@ -32,7 +32,7 @@ const New = async ({ countryCode = "us" }: NewProps) => {
     sortBy: "updated_at",
     countryCode,
   })
-
+  
   // 辅助函数：格式化价格（PC端完整格式）
   const formatPrice = (product: HttpTypes.StoreProduct) => {
     try {
@@ -149,7 +149,14 @@ const New = async ({ countryCode = "us" }: NewProps) => {
                     href={`/${countryCode}/products/${product.handle}`}
                     className="block"
                   >
-                    <div className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer h-96 flex flex-col">
+                    <div className="bg-white rounded-lg p-6 hover:shadow-lg transition-shadow duration-300 cursor-pointer h-96 flex flex-col relative">
+                      {product.tags?.some((tag) => tag.value === "second-hand") && (
+                        <div className="absolute top-0 right-0 w-0 h-0 border-t-[60px] border-t-orange-500 border-l-[60px] border-l-transparent">
+                          <span className="absolute top-[-46px] right-[5px] text-white text-[10px] font-bold rotate-45">
+                            USED
+                          </span>
+                        </div>
+                      )}
                       {/* Product image */}
                       <div className="mb-4 flex justify-center flex-shrink-0">
                         <ProductImage
