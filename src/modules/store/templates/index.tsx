@@ -10,10 +10,14 @@ const StoreTemplate = ({
   sortBy,
   page,
   countryCode,
+  q,
+  tags,
 }: {
   sortBy?: SortOptions
   page?: string
   countryCode: string
+  q?: string
+  tags?: string
 }) => {
   const pageNumber = page ? parseInt(page) : 1
   const sort = sortBy || "created_at"
@@ -23,7 +27,7 @@ const StoreTemplate = ({
       className="flex flex-col small:flex-row small:items-start py-6 content-container"
       data-testid="category-container"
     >
-      <RefinementList sortBy={sort} />
+      <RefinementList sortBy={sort} q={q} tags={tags} />
       <div className="w-full">
         <div className="mb-8 text-2xl-semi">
           <h1 data-testid="store-page-title">All products</h1>
@@ -33,6 +37,8 @@ const StoreTemplate = ({
             sortBy={sort}
             page={pageNumber}
             countryCode={countryCode}
+            q={q}
+            tags={tags}
           />
         </Suspense>
       </div>
