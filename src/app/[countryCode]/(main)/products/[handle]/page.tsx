@@ -7,6 +7,7 @@ import ProductTemplate from "@modules/products/templates"
 import { getBaseURL } from "@lib/util/env"
 import { getHreflangAlternates } from "@lib/util/seo"
 import ProductSchema from "@modules/products/components/product-schema"
+import BreadcrumbSchema from "@modules/common/components/breadcrumb-schema"
 
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
@@ -79,13 +80,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     ? `Starting from ${firstPrice.currency === "EUR" ? "€" : "$"}${(firstPrice.amount / 100).toFixed(2)}`
     : ""
 
+  const fallbackDescription = `${product.title}. CE certified, suitable for industrial power distribution and building electrical. EU warehouse shipping, bulk pricing available. ${priceInfo} Contact us today.`
+  const description = product.description
+    ? `${product.description.slice(0, 150).trim()}. ${priceInfo}`
+    : fallbackDescription
+
   return {
     title: `${product.title} - ${product.title.toLowerCase().includes("dz47") ? "Miniature Circuit Breaker MCB" : "Power Distribution Component"} | Toast Duck`,
-    description: `${product.title}. CE certified, suitable for industrial power distribution and building electrical. EU warehouse shipping, bulk pricing available. ${priceInfo} Contact us today.`,
+    description,
     keywords: [product.title, "circuit breaker", "MCB", "miniature circuit breaker", "Schneider", "ABB", "power distribution", "CE certified", "electrical components"],
     openGraph: {
       title: `${product.title} | Toast Duck Store`,
-      description: `${product.title}. CE certified, suitable for industrial power distribution and building electrical. EU warehouse shipping, bulk pricing.`,
+      description: product.description?.slice(0, 150) || `${product.title}. CE certified, suitable for industrial power distribution and building electrical. EU warehouse shipping, bulk pricing.`,
       url: productUrl,
       images: product.thumbnail ? [{ url: product.thumbnail }] : [],
       type: "website",
@@ -116,6 +122,13 @@ export default async function ProductPage(props: Props) {
 
   return (
     <>
+      <BreadcrumbSchema
+        countryCode={params.countryCode}
+        items={[
+          { name: "Products", url: "/store" },
+          { name: pricedProduct.title || "" },
+        ]}
+      />
       <ProductSchema product={pricedProduct} region={region} countryCode={params.countryCode} />
       <ProductTemplate
         product={pricedProduct}

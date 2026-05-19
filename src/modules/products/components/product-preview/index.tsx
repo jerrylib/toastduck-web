@@ -36,6 +36,7 @@ export default async function ProductPreview({
           images={product.images}
           size="full"
           isFeatured={isFeatured}
+          alt={product.title}
         />
         {product.tags?.some((tag) => tag.value === "second-hand") && (
           <div className="absolute top-0 right-0 w-0 h-0 border-t-[60px] border-t-orange-500 border-l-[60px] border-l-transparent">

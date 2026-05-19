@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { getCategoryByHandle, listCategories } from "@lib/data/categories"
+import { listProducts } from "@lib/data/products"
 import { listRegions } from "@lib/data/regions"
 import { StoreRegion } from "@medusajs/types"
 import CategoryTemplate from "@modules/categories/templates"
@@ -9,6 +10,8 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 
 import { getBaseURL } from "@lib/util/env"
 import { getHreflangAlternates } from "@lib/util/seo"
+import BreadcrumbSchema from "@modules/common/components/breadcrumb-schema"
+import ItemListSchema from "@modules/common/components/item-list-schema"
 
 type Props = {
   params: Promise<{ category: string[]; countryCode: string }>
@@ -92,12 +95,31 @@ export default async function CategoryPage(props: Props) {
     notFound()
   }
 
+  const { response } = await listProducts({
+    countryCode: params.countryCode,
+    queryParams: { category_id: [productCategory.id], limit: 30, fields: "handle,title,thumbnail" } as any,
+  })
+
   return (
-    <CategoryTemplate
-      category={productCategory}
-      sortBy={sortBy}
-      page={page}
-      countryCode={params.countryCode}
-    />
+    <>
+      <BreadcrumbSchema
+        countryCode={params.countryCode}
+        items={[
+          { name: "Categories", url: "/store" },
+          { name: productCategory.name || "" },
+        ]}
+      />
+      <ItemListSchema
+        items={response.products}
+        listName={productCategory.name || "Category"}
+        countryCode={params.countryCode}
+      />
+      <CategoryTemplate
+        category={productCategory}
+        sortBy={sortBy}
+        page={page}
+        countryCode={params.countryCode}
+      />
+    </>
   )
 }
