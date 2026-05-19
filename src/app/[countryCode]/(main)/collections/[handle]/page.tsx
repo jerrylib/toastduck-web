@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { getCollectionByHandle, listCollections } from "@lib/data/collections"
+import { listProducts } from "@lib/data/products"
 import { listRegions } from "@lib/data/regions"
 import { StoreCollection, StoreRegion } from "@medusajs/types"
 import CollectionTemplate from "@modules/collections/templates"
@@ -9,6 +10,8 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 
 import { getBaseURL } from "@lib/util/env"
 import { getHreflangAlternates } from "@lib/util/seo"
+import BreadcrumbSchema from "@modules/common/components/breadcrumb-schema"
+import ItemListSchema from "@modules/common/components/item-list-schema"
 
 type Props = {
   params: Promise<{ handle: string; countryCode: string }>
@@ -115,12 +118,31 @@ export default async function CollectionPage(props: Props) {
     notFound()
   }
 
+  const { response } = await listProducts({
+    countryCode: params.countryCode,
+    queryParams: { collection_id: [collection.id], limit: 30, fields: "handle,title,thumbnail" } as any,
+  })
+
   return (
-    <CollectionTemplate
-      collection={collection}
-      page={page}
-      sortBy={sortBy}
-      countryCode={params.countryCode}
-    />
+    <>
+      <BreadcrumbSchema
+        countryCode={params.countryCode}
+        items={[
+          { name: "Collections", url: "/store" },
+          { name: collection.title || "" },
+        ]}
+      />
+      <ItemListSchema
+        items={response.products}
+        listName={collection.title || "Collection"}
+        countryCode={params.countryCode}
+      />
+      <CollectionTemplate
+        collection={collection}
+        page={page}
+        sortBy={sortBy}
+        countryCode={params.countryCode}
+      />
+    </>
   )
 }

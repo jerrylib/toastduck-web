@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/api/", "/_next/"],
+      disallow: ["/admin/", "/api/", "/_next/", "/account/", "/cart", "/checkout", "/order/"],
     },
     sitemap: "https://www.toastduck.com/sitemap.xml",
   }

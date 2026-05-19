@@ -133,10 +133,6 @@ export async function middleware(request: NextRequest) {
     "user-agent": request.headers.get("user-agent"),
   })
 
-  let redirectUrl = request.nextUrl.href
-
-  let response = NextResponse.redirect(redirectUrl, 307)
-
   let cacheIdCookie = request.cookies.get("_medusa_cache_id")
 
   let cacheId = cacheIdCookie?.value || crypto.randomUUID()
@@ -158,14 +154,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // if one of the country codes is in the url and the cache id is not set, set the cache id and redirect
+  // if one of the country codes is in the url and the cache id is not set, set the cache id and continue
   if (urlHasCountryCode && !cacheIdCookie) {
-    console.log("[Middleware] Setting cache cookie and redirecting")
-    response.cookies.set("_medusa_cache_id", cacheId, {
+    console.log("[Middleware] Setting cache cookie and continuing")
+    const nextResponse = NextResponse.next()
+    nextResponse.cookies.set("_medusa_cache_id", cacheId, {
       maxAge: 60 * 60 * 24,
     })
 
-    return response
+    return nextResponse
   }
 
   // check if the url is a static asset
@@ -183,15 +180,16 @@ export async function middleware(request: NextRequest) {
   if (!urlHasCountryCode && countryCode) {
     const rewriteUrl = `${request.nextUrl.origin}/${countryCode}${redirectPath}${queryString}`
     console.log("[Middleware] Rewriting to:", rewriteUrl)
-    response = NextResponse.rewrite(rewriteUrl)
-    response.cookies.set("_medusa_cache_id", cacheId, {
+    const rewriteResponse = NextResponse.rewrite(rewriteUrl)
+    rewriteResponse.cookies.set("_medusa_cache_id", cacheId, {
       maxAge: 60 * 60 * 24,
     })
+    console.log("[Middleware] ===== Request End =====")
+    return rewriteResponse
   }
 
   console.log("[Middleware] ===== Request End =====")
-  console.log("[Middleware] Response type:", response.headers.get("location") ? "redirect" : "next")
-  return response
+  return NextResponse.next()
 }
 
 export const config = {

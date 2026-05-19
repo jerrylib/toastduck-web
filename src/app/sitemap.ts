@@ -13,12 +13,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       cache: "force-cache",
     })
 
-    // Fetch products for dynamic URLs
-    const { products } = await sdk.client.fetch<{ products: any[] }>("/store/products", {
-      method: "GET",
-      query: { limit: 100 },
-      cache: "force-cache",
-    })
+    // Fetch all products with pagination
+    const products: any[] = []
+    let offset = 0
+    const limit = 100
+    while (true) {
+      const { products: batch, count } = await sdk.client.fetch<{ products: any[]; count: number }>("/store/products", {
+        method: "GET",
+        query: { limit, offset },
+        cache: "force-cache",
+      })
+      products.push(...(batch || []))
+      if (!batch || products.length >= count || batch.length < limit) break
+      offset += limit
+    }
 
     // Fetch collections
     const { collections } = await sdk.client.fetch<{ collections: any[] }>("/store/collections", {
