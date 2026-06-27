@@ -55,6 +55,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "images.toastduck.fun",
       },
+      {
+        protocol: "https",
+        hostname: "images.toastduck.com",
+      },
     ],
   },
 }

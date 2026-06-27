@@ -34,7 +34,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       url: canonicalUrl,
       images: [
         {
-          url: "https://images.toastduck.fun/IMG_2039_20191017-235429_1080x-01KPA9TZR3Y88K9ZN452VE0SEE.webp",
+          url: "https://images.toastduck.com/IMG_2039_20191017-235429_1080x-01KPA9TZR3Y88K9ZN452VE0SEE.webp",
           width: 1080,
           height: 690,
           alt: "Toast Duck Store - Power Distribution Components",
