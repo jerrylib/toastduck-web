@@ -30,3 +30,13 @@ export async function getHreflangAlternates(path: string) {
     languages,
   }
 }
+
+/**
+ * 生成 canonical URL：所有国家版本统一指向默认国家 us 的主版本，
+ * 避免 Google Search Console 报"重复的网址"。
+ * @param path 不含国家前缀的路径，如 ""、"/store"、"/products/my-product"
+ * @returns canonical URL
+ */
+export const getCanonicalUrl = (path: string) => {
+  return `${getBaseURL()}/us${path}`
+}

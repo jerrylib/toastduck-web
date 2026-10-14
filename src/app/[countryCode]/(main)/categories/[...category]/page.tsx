@@ -8,8 +8,7 @@ import { StoreRegion } from "@medusajs/types"
 import CategoryTemplate from "@modules/categories/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
-import { getBaseURL } from "@lib/util/env"
-import { getHreflangAlternates } from "@lib/util/seo"
+import { getCanonicalUrl, getHreflangAlternates } from "@lib/util/seo"
 import BreadcrumbSchema from "@modules/common/components/breadcrumb-schema"
 import ItemListSchema from "@modules/common/components/item-list-schema"
 
@@ -59,9 +58,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     const description = productCategory.description ||
       `${categoryName} series products. CE/UL certified, EU shipping, bulk pricing. Professional supplier of Schneider, ABB circuit breakers and power distribution components.`
 
-    const baseUrl = getBaseURL()
     const categoryPath = `/categories/${params.category.join("/")}`
-    const categoryUrl = `${baseUrl}/${params.countryCode}${categoryPath}`
+    const categoryUrl = getCanonicalUrl(categoryPath)
     const alternates = await getHreflangAlternates(categoryPath)
 
     return {
