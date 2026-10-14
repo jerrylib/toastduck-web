@@ -43,7 +43,7 @@ export async function GET() {
   const sitemaps = countryCodes
     .map(
       (cc) => `  <sitemap>
-    <loc>${BASE_URL}/sitemap.xml/${cc}</loc>
+    <loc>${BASE_URL}/sitemap-${cc}.xml</loc>
   </sitemap>`
     )
     .join("\n")

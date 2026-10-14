@@ -82,7 +82,8 @@ export async function generateStaticParams() {
 }
 
 /**
- * 每个国家的子 sitemap。
+ * 每个国家的子 sitemap（内部路径 /sitemap/{cc}，对外由 rewrites
+ * 映射为 /sitemap-{cc}.xml）。
  * - 默认国家（us）：首页 / store / 全部产品 / 集合 / 分类
  * - 其他国家：首页 / store / 集合 / 分类（不含产品，产品 URL 只归 us）
  */

@@ -61,6 +61,15 @@ const nextConfig = {
       },
     ],
   },
+  // 子 sitemap 对外 URL 映射：/sitemap-{cc}.xml -> 内部路由 /sitemap/{cc}
+  async rewrites() {
+    return [
+      {
+        source: "/sitemap-:countryCode.xml",
+        destination: "/sitemap/:countryCode",
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig
