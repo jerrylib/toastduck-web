@@ -8,8 +8,7 @@ import { StoreCollection, StoreRegion } from "@medusajs/types"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
-import { getBaseURL } from "@lib/util/env"
-import { getHreflangAlternates } from "@lib/util/seo"
+import { getCanonicalUrl, getHreflangAlternates } from "@lib/util/seo"
 import BreadcrumbSchema from "@modules/common/components/breadcrumb-schema"
 import ItemListSchema from "@modules/common/components/item-list-schema"
 
@@ -81,9 +80,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     }
   }
 
-  const baseUrl = getBaseURL()
   const collectionPath = `/collections/${params.handle}`
-  const collectionUrl = `${baseUrl}/${params.countryCode}${collectionPath}`
+  const collectionUrl = getCanonicalUrl(collectionPath)
   const alternates = await getHreflangAlternates(collectionPath)
 
   const metadata = {

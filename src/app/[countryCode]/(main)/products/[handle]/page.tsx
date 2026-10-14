@@ -4,8 +4,7 @@ import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
 import ProductTemplate from "@modules/products/templates"
 
-import { getBaseURL } from "@lib/util/env"
-import { getHreflangAlternates } from "@lib/util/seo"
+import { getCanonicalUrl, getHreflangAlternates } from "@lib/util/seo"
 import ProductSchema from "@modules/products/components/product-schema"
 import BreadcrumbSchema from "@modules/common/components/breadcrumb-schema"
 
@@ -72,8 +71,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
-  const baseUrl = getBaseURL()
-  const productUrl = `${baseUrl}/${params.countryCode}/products/${handle}`
+  const productUrl = getCanonicalUrl(`/products/${handle}`)
   const alternates = await getHreflangAlternates(`/products/${handle}`)
   const firstPrice = product.variants?.[0]?.prices?.[0]
   const priceInfo = firstPrice

@@ -5,8 +5,7 @@ import New from "@modules/home/components/new"
 import Hot from "@modules/home/components/hot"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
-import { getBaseURL } from "@lib/util/env"
-import { getHreflangAlternates } from "@lib/util/seo"
+import { getCanonicalUrl, getHreflangAlternates } from "@lib/util/seo"
 
 type Props = {
   params: Promise<{ countryCode: string }>
@@ -14,8 +13,7 @@ type Props = {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-  const baseUrl = getBaseURL()
-  const canonicalUrl = `${baseUrl}/${params.countryCode}`
+  const canonicalUrl = getCanonicalUrl("")
   const alternates = await getHreflangAlternates("")
 
   return {

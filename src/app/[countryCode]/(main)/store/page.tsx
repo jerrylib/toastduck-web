@@ -2,8 +2,7 @@ import { Metadata } from "next"
 
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import StoreTemplate from "@modules/store/templates"
-import { getBaseURL } from "@lib/util/env"
-import { getHreflangAlternates } from "@lib/util/seo"
+import { getCanonicalUrl, getHreflangAlternates } from "@lib/util/seo"
 
 type Props = {
   searchParams: Promise<{
@@ -19,8 +18,7 @@ type Props = {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-  const baseUrl = getBaseURL()
-  const canonicalUrl = `${baseUrl}/${params.countryCode}/store`
+  const canonicalUrl = getCanonicalUrl("/store")
   const alternates = await getHreflangAlternates("/store")
 
   return {
