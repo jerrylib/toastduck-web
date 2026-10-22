@@ -1,6 +1,6 @@
 "use client"
 
-const WHATSAPP_NUMBER = "8617605010609"
+const WHATSAPP_NUMBER = "8613459831691"
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`
 
 export default function WhatsAppFloat() {
