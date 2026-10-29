@@ -3,7 +3,7 @@ import { getBaseURL } from "@lib/util/env"
 
 export const dynamic = "force-static"
 
-const DEFAULT_COUNTRY = "us"
+const DEFAULT_COUNTRY = "cn"
 
 function escapeXml(str: string): string {
   return str
@@ -84,8 +84,8 @@ export async function generateStaticParams() {
 /**
  * 每个国家的子 sitemap（内部路径 /sitemap/{cc}，对外由 rewrites
  * 映射为 /sitemap-{cc}.xml）。
- * - 默认国家（us）：首页 / store / 全部产品 / 集合 / 分类
- * - 其他国家：首页 / store / 集合 / 分类（不含产品，产品 URL 只归 us）
+ * - 默认国家（cn）：首页 / store / 全部产品 / 集合 / 分类
+ * - 其他国家：首页 / store / 集合 / 分类（不含产品，产品 URL 只归 cn）
  */
 export async function GET(
   _request: Request,

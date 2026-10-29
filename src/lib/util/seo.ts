@@ -23,8 +23,8 @@ export async function getHreflangAlternates(path: string) {
     })
   })
 
-  // Add x-default (usually US or the most common region)
-  languages["x-default"] = `${baseUrl}/us${path}`
+  // Add x-default (usually CN or the most common region)
+  languages["x-default"] = `${baseUrl}/cn${path}`
 
   return {
     languages,
@@ -32,11 +32,11 @@ export async function getHreflangAlternates(path: string) {
 }
 
 /**
- * 生成 canonical URL：所有国家版本统一指向默认国家 us 的主版本，
+ * 生成 canonical URL：所有国家版本统一指向默认国家 cn 的主版本，
  * 避免 Google Search Console 报"重复的网址"。
  * @param path 不含国家前缀的路径，如 ""、"/store"、"/products/my-product"
  * @returns canonical URL
  */
 export const getCanonicalUrl = (path: string) => {
-  return `${getBaseURL()}/us${path}`
+  return `${getBaseURL()}/cn${path}`
 }
