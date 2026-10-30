@@ -5,9 +5,10 @@ import Image from "next/image"
 type ImageGalleryProps = {
   images: HttpTypes.StoreProductImage[]
   productTitle?: string
+  tags?: HttpTypes.StoreProduct["tags"]
 }
 
-const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
+const ImageGallery = ({ images, productTitle, tags }: ImageGalleryProps) => {
   return (
     <div className="flex items-start relative">
       <div className="flex flex-col flex-1 small:mx-16 gap-y-4">
@@ -18,6 +19,13 @@ const ImageGallery = ({ images, productTitle }: ImageGalleryProps) => {
               className="relative w-full overflow-hidden bg-ui-bg-subtle p-0"
               id={image.id}
             >
+              {index === 0 && tags?.some((tag) => tag.value === "second-hand") && (
+                <div className="absolute top-0 right-0 z-10 w-0 h-0 border-t-[60px] border-t-orange-500 border-l-[60px] border-l-transparent">
+                  <span className="absolute top-[-46px] right-[5px] text-white text-[10px] font-bold rotate-45">
+                    USED
+                  </span>
+                </div>
+              )}
               {!!image.url && (
                 <Image
                   src={image.url}
