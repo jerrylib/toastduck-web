@@ -75,7 +75,7 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
 
   // 辅助函数：获取产品描述
   const getProductSubtitle = (product: HttpTypes.StoreProduct) => {
-    return product.subtitle || (product.description ? product.description.substring(0, 50) + "..." : "优质产品")
+    return product.subtitle || (product.description ? product.description.substring(0, 50) + "..." : " ")
   }
 
   // 辅助函数：生成颜色选项（基于产品变体或默认颜色）
@@ -179,7 +179,7 @@ const Hot = async ({ countryCode = "us" }: HotProps) => {
 
                         <div className="flex-shrink-0">
                           {/* Color options */}
-                          <div className="flex justify-center space-x-1 mb-3">
+                          <div className="flex justify-center space-x-1 mb-3 hidden">
                             {colors.map((color, index) => (
                               <div
                                 key={index}
