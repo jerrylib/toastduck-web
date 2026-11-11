@@ -104,6 +104,90 @@ export const listProducts = async ({
 }
 
 /**
+ * 商品列表接口不返回 `inventory_quantity`，只有商品详情接口在显式要求
+ * `+variants.inventory_quantity` 时才会对「开启库存管理」的变体返回数量。
+ * 这里按商品 id 批量补全库存，供列表页做「有库存 / 无库存」判断。
+ * 每个商品单独缓存（与列表同 tag），后台改动可通过 /api/revalidate 清理。
+ */
+const INVENTORY_FIELDS = [
+  "*variants",
+  "+variants.inventory_quantity",
+  "+variants.manage_inventory",
+  "+variants.allow_backorder",
+].join(",")
+
+type VariantStock = {
+  id?: string
+  manage_inventory?: boolean | null
+  allow_backorder?: boolean | null
+  inventory_quantity?: number | null
+}
+
+export const listVariantStock = async (
+  productIds: string[],
+  options: { revalidate?: number | false } = {}
+): Promise<Record<string, VariantStock[]>> => {
+  const { revalidate = 60 } = options
+
+  const result: Record<string, VariantStock[]> = {}
+  const queue = [...productIds]
+  const concurrency = 10
+
+  const worker = async () => {
+    while (queue.length) {
+      const id = queue.shift()
+
+      if (!id) {
+        break
+      }
+
+      // 后端偶发网络抖动，单个商品最多重试 2 次；仍失败则保留未知状态
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const { product } = await sdk.client
+            .fetch<{ product: HttpTypes.StoreProduct }>(
+              `/store/products/${id}`,
+              {
+                method: "GET",
+                query: { fields: INVENTORY_FIELDS },
+                ...(revalidate === false
+                  ? { cache: "no-store" as const }
+                  : {
+                      next: {
+                        revalidate,
+                        tags: ["products-list", "inventory"],
+                      },
+                    }),
+              }
+            )
+
+          result[id] = ((product?.variants ?? []) as VariantStock[]).map(
+            (variant) => ({
+              id: variant.id,
+              manage_inventory: variant.manage_inventory,
+              allow_backorder: variant.allow_backorder,
+              inventory_quantity: variant.inventory_quantity,
+            })
+          )
+          break
+        } catch {
+          if (attempt === 2) {
+            console.warn("[inventory] failed", id)
+          }
+          await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)))
+        }
+      }
+    }
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, queue.length) }, () => worker())
+  )
+
+  return result
+}
+
+/**
  * This will fetch 100 products to the Next.js cache and sort them based on the sortBy parameter.
  * It will then return the paginated products based on the page and limit parameters.
  */

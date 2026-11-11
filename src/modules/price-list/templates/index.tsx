@@ -3,7 +3,7 @@ import { HttpTypes } from "@medusajs/types"
 
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
-import { listProducts } from "@lib/data/products"
+import { listProducts, listVariantStock } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { Pagination } from "@modules/store/components/pagination"
@@ -20,7 +20,9 @@ const FETCH_SIZE = 100
 const CACHE_SECONDS = 24 * 60 * 60
 
 // 传了 fields 就只返回这里列出的字段，所以标题/描述/缩略图/handle 必须显式写全，
-// 否则列表只剩价格（缩略图会退化成占位图）
+// 否则列表只剩价格（缩略图会退化成占位图）。
+// 变体只取价格：`*variants` 整段展开会让 100 条分页响应体过大，后端容易 fetch failed；
+// 库存（manage_inventory / inventory_quantity）统一由详情接口补全，见 withInventory。
 const PRODUCT_FIELDS = [
   "id",
   "title",
@@ -30,7 +32,6 @@ const PRODUCT_FIELDS = [
   "thumbnail",
   "collection_id",
   "*variants.calculated_price",
-  "*variants.inventory_quantity",
 ].join(",")
 
 export type StockFilter = "in" | "out"
@@ -125,8 +126,60 @@ const fetchAllProducts = async (
   return products
 }
 
-const filterOptions: { value?: StockFilter; label: string }[] = [
-  { label: "All products" },
+/**
+ * 列表接口不返回 manage_inventory / inventory_quantity，库存只能从商品详情接口拿。
+ * 这里对每个商品补一次库存，再按变体 id 回填，供「有库存 / 无库存」过滤与行内提示使用。
+ * 单个商品取数失败时保持未知，isProductInStock 会把它当作可售，避免误标「无库存」。
+ */
+const withInventory = async (products: HttpTypes.StoreProduct[]) => {
+  const needsInventory = products.filter((product) =>
+    ((product.variants ?? []) as any[]).length > 0
+  )
+
+  if (!needsInventory.length) {
+    return products
+  }
+
+  const stockByProduct = await withRetry(() =>
+    listVariantStock(
+      needsInventory.map((product) => product.id),
+      { revalidate: CACHE_SECONDS }
+    )
+  )
+
+  return products.map((product) => {
+    const stock = stockByProduct[product.id]
+
+    if (!stock?.length) {
+      return product
+    }
+
+    const byVariantId = new Map(stock.map((item) => [item.id, item]))
+
+    return {
+      ...product,
+      variants: ((product.variants ?? []) as any[]).map((variant) => {
+        const patch = byVariantId.get(variant.id)
+
+        if (!patch) {
+          return variant
+        }
+
+        return {
+          ...variant,
+          manage_inventory: patch.manage_inventory ?? variant.manage_inventory,
+          allow_backorder: patch.allow_backorder ?? variant.allow_backorder,
+          inventory_quantity:
+            typeof patch.inventory_quantity === "number"
+              ? patch.inventory_quantity
+              : variant.inventory_quantity,
+        }
+      }),
+    } as HttpTypes.StoreProduct
+  })
+}
+
+const filterOptions: { value?: StockFilter; label: string }[] = [  { label: "All products" },
   { value: "in", label: "In stock" },
   { value: "out", label: "Out of stock" },
 ]
@@ -259,7 +312,9 @@ export default async function PriceListTemplate({
   } else if (hasFilters) {
     // 库存筛选和关键词搜索都需要按完整商品集合计算，才能保证分页准确
     const allProducts = await fetchAllProducts(region.id, filters)
-    const filtered = allProducts.filter(
+    // 库存判断依赖详情接口补全数量，否则「无库存」永远是 0 条
+    const withStock = stock ? await withInventory(allProducts) : allProducts
+    const filtered = withStock.filter(
       (product) =>
         (!stock || isProductInStock(product) === (stock === "in")) &&
         (!q || matchesQuery(product, q))
@@ -289,6 +344,9 @@ export default async function PriceListTemplate({
 
     products = response.response.products
     count = response.response.count
+
+    // 未筛选时也要给当前页的行补库存，才能正确显示 Out of stock
+    products = await withInventory(products)
   }
 
   const totalPages = Math.ceil(count / PAGE_SIZE)
