@@ -12,11 +12,14 @@ export const listProducts = async ({
   queryParams,
   countryCode,
   regionId,
+  revalidate,
 }: {
   pageParam?: number
   queryParams?: HttpTypes.FindParams & HttpTypes.StoreProductParams
   countryCode?: string
   regionId?: string
+  /** 缓存时长（秒）；false 表示不缓存，缺省沿用 60 秒 */
+  revalidate?: number | false
 }): Promise<{
   response: { products: HttpTypes.StoreProduct[]; count: number }
   nextPage: number | null
@@ -70,11 +73,20 @@ export const listProducts = async ({
           ...queryParams,
         },
         headers,
-        next: {
-          ...next,
-          revalidate: 60, // 1分钟缓存
-          tags: [...(next.tags || []), ...fixedTags],
-        },
+        ...(revalidate === false
+          ? { cache: "no-store" as const }
+          : {
+              next: {
+                ...next,
+                revalidate: revalidate ?? 60,
+                tags: [
+                  ...(next.tags || []),
+                  ...fixedTags,
+                  "categories",
+                  "collections",
+                ],
+              },
+            }),
       }
     )
     .then(({ products, count }) => {

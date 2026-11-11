@@ -1,0 +1,57 @@
+.body {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.body h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 2rem 0 0.75rem;
+}
+
+.body h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.body p {
+  margin: 0 0 1rem;
+}
+
+.body ul,
+.body ol {
+  margin: 0 0 1rem;
+  padding-left: 1.25rem;
+}
+
+.body ul {
+  list-style: disc;
+}
+
+.body ol {
+  list-style: decimal;
+}
+
+.body li {
+  margin-bottom: 0.5rem;
+}
+
+.body strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.body em {
+  color: #6b7280;
+}
+
+.body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}

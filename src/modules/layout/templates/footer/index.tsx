@@ -112,14 +112,13 @@ export default async function Footer() {
               <span className="txt-small-plus txt-ui-fg-base">Toast Duck</span>
               <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
                 <li>
-                  <a
-                    href="https://company.toastduck.com"
-                    target="_blank"
-                    rel="noreferrer"
+                  <LocalizedClientLink
+                    href="/company/home"
                     className="hover:text-ui-fg-base"
+                    data-testid="footer-company-link"
                   >
                     Company
-                  </a>
+                  </LocalizedClientLink>
                 </li>
               </ul>
             </div>

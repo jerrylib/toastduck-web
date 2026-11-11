@@ -21,10 +21,13 @@ export const retrieveCollection = async (id: string) => {
 }
 
 export const listCollections = async (
-  queryParams: Record<string, string> = {}
+  queryParams: Record<string, string> = {},
+  options: { revalidate?: number | false } = {}
 ): Promise<{ collections: HttpTypes.StoreCollection[]; count: number }> => {
+  const baseCache = await getCacheOptions("collections")
   const next = {
-    ...(await getCacheOptions("collections")),
+    ...baseCache,
+    tags: [...("tags" in baseCache ? baseCache.tags : []), "collections"],
   }
 
   queryParams.limit = queryParams.limit || "100"
@@ -35,8 +38,12 @@ export const listCollections = async (
       "/store/collections",
       {
         query: queryParams,
-        next,
-        cache: "force-cache",
+        // 默认强缓存；调用方可指定 revalidate 秒数或 false 跳过缓存
+        ...(options.revalidate === false
+          ? { cache: "no-store" as const }
+          : options.revalidate
+            ? { next: { ...next, revalidate: options.revalidate } }
+            : { next, cache: "force-cache" as const }),
       }
     )
     .then(({ collections }) => ({ collections, count: collections.length }))

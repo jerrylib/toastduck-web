@@ -1,5 +1,6 @@
 import { sdk } from "@lib/config"
 import { getBaseURL } from "@lib/util/env"
+import { NEWS_ARTICLES } from "@modules/company/data/news"
 
 export const dynamic = "force-static"
 
@@ -174,6 +175,61 @@ export async function GET(
         0.8
       )
     )
+
+    // Products list with RMB prices
+    urls.push(
+      buildUrlEntry(
+        BASE_URL,
+        countryCode,
+        "/products",
+        allCountryCodes,
+        new Date(),
+        "daily",
+        0.7
+      )
+    )
+
+    // Company site home (also serves as the company entry point; /company
+    // permanently redirects here)
+    urls.push(
+      buildUrlEntry(
+        BASE_URL,
+        countryCode,
+        "/company/home",
+        allCountryCodes,
+        new Date(),
+        "monthly",
+        0.7
+      )
+    )
+
+    // Company news list
+    urls.push(
+      buildUrlEntry(
+        BASE_URL,
+        countryCode,
+        "/company/news",
+        allCountryCodes,
+        new Date(),
+        "weekly",
+        0.6
+      )
+    )
+
+    // Company news articles
+    for (const article of NEWS_ARTICLES) {
+      urls.push(
+        buildUrlEntry(
+          BASE_URL,
+          countryCode,
+          `/company/news/${article.url}`,
+          allCountryCodes,
+          new Date(article.publishedAt),
+          "monthly",
+          0.5
+        )
+      )
+    }
 
     // Products（仅默认国家）
     for (const product of products ?? []) {
