@@ -1,62 +1,30 @@
-import { Metadata } from "next"
-
-import PriceListTemplate from "@modules/price-list/templates"
-import { StockFilter } from "@modules/price-list/templates"
-import { getCanonicalUrl, getHreflangAlternates } from "@lib/util/seo"
+import { permanentRedirect } from "next/navigation"
 
 type Props = {
   params: Promise<{
     countryCode: string
   }>
-  searchParams: Promise<{
-    page?: string
-    stock?: string
-    q?: string
-  }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
-export async function generateMetadata(props: Props): Promise<Metadata> {
-  const canonicalUrl = getCanonicalUrl("/price-list")
-  const alternates = await getHreflangAlternates("/price-list")
-
-  return {
-    title: "Price List | RMB Prices | Toast Duck",
-    description:
-      "Product price list with RMB (CNY) pricing for circuit breakers, contactors, variable frequency drives and other industrial electrical components.",
-    keywords: [
-      "price list",
-      "RMB price",
-      "CNY price",
-      "circuit breaker price",
-      "industrial electrical components",
-    ],
-    openGraph: {
-      title: "Price List | RMB Prices | Toast Duck",
-      description:
-        "Product price list with RMB (CNY) pricing for circuit breakers, contactors and variable frequency drives.",
-      type: "website",
-      url: canonicalUrl,
-    },
-    alternates: {
-      canonical: canonicalUrl,
-      languages: alternates.languages,
-    },
-  }
-}
-
-export default async function PriceListPage(props: Props) {
+/**
+ * `/price-list` 已改名为 `/products`，旧链接永久跳转并保留筛选参数。
+ */
+export default async function PriceListRedirectPage(props: Props) {
+  const { countryCode } = await props.params
   const searchParams = await props.searchParams
-  const pageNumber = searchParams.page ? parseInt(searchParams.page) : 1
-  const currentPage = Number.isNaN(pageNumber) || pageNumber < 1 ? 1 : pageNumber
 
-  // 库存筛选：in=仅有货，out=仅无货，其他值/缺省=全部
-  const stockParam = searchParams.stock
-  const stock: StockFilter | undefined =
-    stockParam === "in" || stockParam === "out" ? stockParam : undefined
+  const params = new URLSearchParams()
 
-  // 关键词搜索：去掉首尾空白，过长内容截断，避免恶意超长参数
-  const qParam = searchParams.q?.trim().slice(0, 100)
-  const q = qParam || undefined
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (Array.isArray(value)) {
+      value.forEach((item) => params.append(key, item))
+    } else if (typeof value === "string" && value) {
+      params.set(key, value)
+    }
+  }
 
-  return <PriceListTemplate page={currentPage} stock={stock} q={q} />
+  const query = params.toString()
+
+  permanentRedirect(`/${countryCode}/products${query ? `?${query}` : ""}`)
 }

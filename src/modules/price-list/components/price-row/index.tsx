@@ -57,7 +57,7 @@ export default function PriceRow({
       className="py-4 flex items-start gap-x-4 small:gap-x-6"
       data-testid="price-list-row"
     >
-      <div className="relative w-16 small:w-20 shrink-0 aspect-square overflow-hidden rounded-lg bg-white border border-ui-border-base">
+      <div className="relative w-16 small:w-20 shrink-0 aspect-[3/4] overflow-hidden rounded-lg bg-white border border-ui-border-base">
         <PriceThumbnail src={thumbnail} alt={product.title} />
       </div>
       <div className="min-w-0 flex-1 flex flex-col gap-y-2 small:grid small:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_auto] small:items-baseline small:gap-x-8">

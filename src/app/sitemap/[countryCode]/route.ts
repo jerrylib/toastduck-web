@@ -176,6 +176,19 @@ export async function GET(
       )
     )
 
+    // Products list with RMB prices
+    urls.push(
+      buildUrlEntry(
+        BASE_URL,
+        countryCode,
+        "/products",
+        allCountryCodes,
+        new Date(),
+        "daily",
+        0.7
+      )
+    )
+
     // Company site home (also serves as the company entry point; /company
     // permanently redirects here)
     urls.push(
