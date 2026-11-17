@@ -13,13 +13,6 @@ build
 .github
 .vscode
 .idea
-# src 源代码在构建时不需要
-src
-# 配置文件在运行时由环境变量提供
 .env*
-tailwind.config.js
-postcss.config.js
-tsconfig.json
-*.tsx
-*.ts
-!*.d.ts
+node_modules
+.next
